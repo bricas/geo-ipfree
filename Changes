@@ -1,0 +1,16 @@
+Revision history for Perl extension Geo::IPfree.
+
+0.2 Sat Mar 22 18:10 2003
+   - Change sysread() to read() for better portability.
+   - Speed improvement for multiples LookUp().
+     4 times faster!
+
+0.01.1  Nov 6 14:05:03 2002
+   - Fix seek bug for Perl 5.6.0 on multiples LookUp().
+   
+0.01  Sun Oct 20 01:07:01 2002
+   - Released the 1st version!
+
+
+Enjoy! :-P
+
