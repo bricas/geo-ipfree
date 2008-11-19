@@ -1,11 +1,17 @@
+use strict;
+use warnings;
+
 use ExtUtils::MakeMaker;
-# See lib/ExtUtils/MakeMaker.pm for details of how to influence
-# the contents of the Makefile that is written.
+
 WriteMakefile(
-    'NAME'		=> 'Geo::IPfree',
-    'VERSION_FROM'	=> 'lib/Geo/IPfree.pm', # finds $VERSION
-    'PREREQ_PM'		=> {}, # e.g., Module::Name => 1.1
-    ($] >= 5.005 ?    ## Add these new keywords supported since 5.005
-      (ABSTRACT_FROM => 'lib/Geo/IPfree.pm', # retrieve abstract from module
-       AUTHOR     => 'Graciliano M. P. <gm@virtuasites.com.br>') : ()),
+  DISTNAME      => 'Geo-IPfree',
+  NAME          => 'Geo::IPfree',
+  AUTHOR        => 'Graciliano M. P. <gm@virtuasites.com.br>',
+  ABSTRACT_FROM => 'lib/Geo/IPfree.pm',
+  VERSION_FROM  => 'lib/Geo/IPfree.pm',
+  (eval { ExtUtils::MakeMaker->VERSION(6.21) } ? (LICENSE => 'perl') : ()),
+  PREREQ_PM     => {
+    'Test::More' => '0.47',
+  },
 );
+
