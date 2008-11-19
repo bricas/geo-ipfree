@@ -259,29 +259,16 @@ sub nslookup {
 ################
 
 sub find_db_file {
-  my $lib_path = '';
+  my @locations = ( qw(/usr/local/share /usr/local/share/GeoIPfree),
+    map { $_, "$_/Geo" } @INC );
 
-  foreach my $Key ( keys %INC ) {
-    if ($Key =~ /^IPfree.pm$/i) {
-      my ($lib) = ( $INC{$Key} =~ /^(.*?)[\\\/]+[^\\\/]+$/gs ) ;
-      if (-e "$lib/$def_db") { $lib_path = $lib ; last ;}
-    }
-  }
+  # lastly, find where this module was loaded, and try that dir
+  my ( $lib ) = ( $INC{'Geo/IPfree.pm'} =~ /^(.*?)[\\\/]+[^\\\/]+$/gs );
+  push @locations, $lib;
 
-  if ($lib_path eq '') {
-    foreach my $INC_i ( @INC ) {
-      my $lib = "$INC_i/Geo" ;
-      if (-e "$lib/$def_db") { $lib_path = $lib ; last ;}
-    }
+  for my $file ( map { "$_/$def_db" } @locations ) {
+    return $file if -e $file;
   }
-  
-  if ($lib_path eq '') {
-    foreach my $dir ( @INC , '/tmp' , '/usr/local/share' , '/usr/local/share/GeoIPfree' ) {
-      if (-e "$dir/$def_db") { $lib_path = $dir ; last ;}
-    }
-  }
-  
-  return( "$lib_path/$def_db" ) ;
 }
 
 
@@ -492,6 +479,20 @@ See CPAN for updates of the DB...
 The file ipscountry.dat is made only for Geo::IPfree and has their own format.
 To convert it see the tool "ipct2txt.pl" in the C<misc> directoy.
 
+The module looks for C<ipscountry.dat> in the following locations:
+
+=over 4
+
+=item * /usr/local/share
+
+=item * /usr/local/share/GeoIPfree
+
+=item * through @INC (as well as all @INC directories plus "/Geo")
+
+=item * from the same location that IPfree.pm was loaded
+
+=back
+
 =head1 AUTHOR
 
 Graciliano M. P. <gm@virtuasites.com.br>.
@@ -505,5 +506,3 @@ This program is free software; you can redistribute it and/or
 modify it under the same terms as Perl itself.
 
 =cut
-
-
