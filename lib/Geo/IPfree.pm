@@ -22,6 +22,7 @@ use 5.006;
 use Memoize;
 use Carp qw() ;
 use strict qw(vars) ;
+use warnings;
 
 require Exporter;
 our @ISA = qw(Exporter);
@@ -500,7 +501,7 @@ Graciliano M. P. <gm@virtuasites.com.br>.
 Thanks to Laurent Destailleur (author of AWStats) that tested it on many OS and
 fixed bugs for them, like the not portable sysread, and asked for some speed improvement.
 
-=head1 COPYRIGHT
+=head1 COPYRIGHT & LICENSE
 
 This program is free software; you can redistribute it and/or
 modify it under the same terms as Perl itself.
