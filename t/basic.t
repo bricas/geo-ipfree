@@ -1,29 +1,34 @@
-use Test::More tests => 5;
+use Test::More tests => 10;
 
 use Geo::IPfree;
 
 
 { # localhost
     my ($country,$country_name,$ip) = Geo::IPfree::LookUp("127.0.0.1") ;
-    ok($country,'L0');
+    is($country,'ZZ');
+    ok(!defined $country_name);
 }
 
 { # intranet
     my ($country,$country_name,$ip) = Geo::IPfree::LookUp("10.0.0.1") ;
-    ok($country,'I0');
+    is($country,'ZZ');
+    ok(!defined $country_name);
 }
 
 { # www.nic.br
     my ($country,$country_name,$ip) = Geo::IPfree::LookUp("200.160.7.2") ;
-    ok($country,'BR');
+    is($country,'BR');
+    is($country_name, 'Brazil');
 }
 
 { # www.nic.us
     my ($country,$country_name,$ip) = Geo::IPfree::LookUp("209.173.53.26") ;
-    ok($country,'US');
+    is($country,'US');
+    is($country_name, 'United States');
 }
 
 { # www.nic.fr
     my ($country,$country_name,$ip) = Geo::IPfree::LookUp("192.134.4.20") ;
-    ok($country,'FR');
+    is($country,'EU');
+    is($country_name, 'Europe');
 }
