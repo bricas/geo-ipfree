@@ -1,9 +1,10 @@
 Revision history for Perl extension Geo::IPfree.
 
 0.3 XXX
-    - add webgeo2ipct script (RT #40938)
-    - add new data file (RT #40938, #7663)
+    - Add webgeo2ipct script (RT #40938)
+    - Add new data file (RT #40938, #7663)
     - Fix all warnings (RT #24333)
+    - Handle hosts that fail nslookup (RT #18434)
     - Dist cleanup.
 
 0.2 Sat Mar 22 18:10 2003

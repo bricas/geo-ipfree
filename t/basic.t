@@ -1,4 +1,4 @@
-use Test::More tests => 10;
+use Test::More tests => 11;
 
 use Geo::IPfree;
 
@@ -31,4 +31,8 @@ use Geo::IPfree;
     my ($country,$country_name,$ip) = Geo::IPfree::LookUp("192.134.4.20") ;
     is($country,'EU');
     is($country_name, 'Europe');
+}
+
+{ # does not exist
+    ok( !defined Geo::IPfree::LookUp('dne.undef') );
 }

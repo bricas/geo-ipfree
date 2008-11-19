@@ -163,6 +163,8 @@ sub LookUp {
   
   if ($ip !~ /^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$/) { $ip = nslookup($ip) ;}
 
+  return unless length $ip;
+
   ## Since the last class is always from the same country, will try 0 and cache 0:
   my $ip_class = $ip ;
   $ip_class =~ s/\.\d+$/\.0/ ;
@@ -246,6 +248,7 @@ sub nslookup {
   my ( $host ) = @_ ;
   require Socket ;
   my $iaddr = Socket::inet_aton($host) ;
+  $iaddr = '' if !defined $iaddr;
   my @ip = unpack('C4',$iaddr) ;
   if (! @ip && ! $_[1]) { return( &nslookup("www.$host",1) ) ;}
   return( join (".",@ip) ) ;
@@ -435,7 +438,7 @@ Clean the memory used by the cache.
 
 =item Faster
 
-Make the LookUp() faster, good for big amount of LookUp()s. This will load all the DB in the memory (200Kb) and read from there,
+Make the LookUp() faster, good for big amount of LookUp()s. This will load all the DB in the memory (639Kb) and read from there,
 not from HD (good way for slow HD or network disks), but use more memory. The module "Memoize" will be enabled for some internal functions too.
 
 Note that if you make a big amount of querys to LookUp(), in the end the amount of memory can be big, than is better to use more memory from the begin and make all faster.
@@ -487,20 +490,7 @@ See CPAN for updates of the DB...
 =head1 NOTES
 
 The file ipscountry.dat is made only for Geo::IPfree and has their own format.
-To convert it see the tool "ipct2txt.pl" in the same path of Geo/IPfree.pm.
-
-=head1 CHAGES
-
-0.2 - Sat Mar 22 18:10 2003
-
-   - Change sysread() to read() for better portability.
-   - Speed improvement for multiples LookUp().
-     4 times faster!
-
-0.01.1 - Nov 6 14:05:03 2002 (not released on CPAN)
-
-   - Fix seek bug for Perl 5.6.0 on multiples LookUp().
-
+To convert it see the tool "ipct2txt.pl" in the C<misc> directoy.
 
 =head1 AUTHOR
 
