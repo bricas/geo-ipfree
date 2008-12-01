@@ -37,5 +37,6 @@ use Geo::IPfree;
 }
 
 { # does not exist
-    ok( !defined Geo::IPfree::LookUp('dne.undef') );
+    my @result = Geo::IPfree::LookUp('dne.undef');
+    is( scalar @result, 0, 'undef result' );
 }
