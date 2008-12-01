@@ -1,6 +1,6 @@
 Revision history for Perl extension Geo::IPfree.
 
-0.4 XXX
+0.4 Dec 01 2008
     - fix "undef" test
 
 0.3 Nov 19 2008

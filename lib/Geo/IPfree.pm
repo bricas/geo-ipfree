@@ -65,10 +65,7 @@ my (%baseX,$base,$THIS) ;
 
 my $cache_expire = 1000 ;
 
-####################
-# DECLARE BASE LIB #
-####################
-
+# DECLARE BASE LIB
 {
   my $c = 0 ;
   %baseX = map { $_ => ($c++) } @baseX ;
@@ -76,10 +73,6 @@ my $cache_expire = 1000 ;
   
   foreach my $Key ( keys %countrys ) { $countrys{$Key} =~ s/_/ /gs ;}
 }
-
-#######
-# NEW #
-#######
 
 sub new {
   my ($class, $db_file) = @_ ;
@@ -102,10 +95,6 @@ sub new {
 
   return( $this ) ;
 }
-
-##########
-# LOADDB #
-##########
 
 sub LoadDB {
   my $this = shift ;
@@ -142,10 +131,6 @@ sub LoadDB {
   
   $this->{handler} = $handler ;
 }
-
-##########
-# LOOKUP #
-##########
 
 sub LookUp {
   my $this ;
@@ -212,10 +197,6 @@ sub LookUp {
   return( $country , $countrys{$country} , $ip_class ) ;
 }
 
-##########
-# FASTER #
-##########
-
 sub Faster {
   my $this = shift ;
   
@@ -235,15 +216,7 @@ sub Faster {
   $this->{FASTER} = 1 ;
 }
 
-###############
-# CLEAN_CACHE #
-###############
-
 sub Clean_Cache { delete $_[0]->{CACHE} ; 1 ;}
-
-############
-# NSLOOKUP #
-############
 
 sub nslookup {
   my ( $host ) = @_ ;
@@ -254,10 +227,6 @@ sub nslookup {
   if (! @ip && ! $_[1]) { return( &nslookup("www.$host",1) ) ;}
   return( join (".",@ip) ) ;
 }
-
-################
-# FIND_DB_FILE #
-################
 
 sub find_db_file {
   my @locations = ( qw(/usr/local/share /usr/local/share/GeoIPfree),
@@ -272,20 +241,11 @@ sub find_db_file {
   }
 }
 
-
-#########
-# IP2NB #
-#########
-
 sub ip2nb {
   my @ip = split(/\./ , $_[0]) ;
   #return( 16777216* $ip[0] + 65536* $ip[1] + 256* $ip[2] + $ip[3] ) ;
   return( ($ip[0]<<24) + ($ip[1]<<16) + ($ip[2]<<8) + $ip[3] ) ;
 }
-
-#########
-# NB2IP #
-#########
 
 sub nb2ip {
   my ( $ipn ) = @_ ;
@@ -311,10 +271,6 @@ sub nb2ip {
   return( join (".", @ip) ) ;
 }
  
-#############
-# DEC2BASEX #
-#############
-
 sub dec2baseX {
   my ( $dec ) = @_ ;
   
@@ -341,10 +297,6 @@ sub dec2baseX {
   return( $baseX ) ;
 }
 
-#############
-# BASEX2DEC #
-#############
-
 sub baseX2dec {
   my ( $baseX ) = @_ ;
   
@@ -359,10 +311,6 @@ sub baseX2dec {
 
   return( $dec ) ;
 }
-
-#######
-# END #
-#######
 
 1;
 
