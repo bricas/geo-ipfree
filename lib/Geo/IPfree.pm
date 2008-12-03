@@ -19,15 +19,16 @@
 
 package Geo::IPfree;
 use 5.006;
+use strict;
+use warnings;
+
 use Memoize;
 use Carp qw() ;
-use strict qw(vars) ;
-use warnings;
 
 require Exporter;
 our @ISA = qw(Exporter);
 
-our $VERSION = '0.4';
+our $VERSION = '0.5';
 
 our @EXPORT = qw(LookUp LoadDB) ;
 our @EXPORT_OK = @EXPORT ;

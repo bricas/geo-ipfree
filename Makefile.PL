@@ -12,6 +12,7 @@ WriteMakefile(
   (eval { ExtUtils::MakeMaker->VERSION(6.21) } ? (LICENSE => 'perl') : ()),
   PREREQ_PM     => {
     'Test::More' => '0.47',
+    'Memoize'    => 0,
   },
 );
 
