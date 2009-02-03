@@ -38,6 +38,6 @@ use Geo::IPfree;
 
 SKIP: { # does not exist
     my @result = Geo::IPfree::LookUp('dne.undef');
-    skip '"dne.undef" should not resolve, but it is...', 1 if @result == 3;
+    skip '"dne.undef" should not resolve, but it does for you.', 1 if @result == 3;
     is( scalar @result, 0, 'undef result' );
 }
