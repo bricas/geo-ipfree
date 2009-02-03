@@ -1,6 +1,6 @@
 Revision history for Perl extension Geo::IPfree.
 
-0.5 XXX
+0.5 Feb 03 2009
     - include Memoize in prereqs for older perls
 
 0.4 Dec 01 2008
