@@ -28,7 +28,7 @@ use Carp qw();
 require Exporter;
 our @ISA = qw(Exporter);
 
-our $VERSION = '0.5';
+our $VERSION = '0.6';
 
 our @EXPORT = qw(LookUp LoadDB);
 our @EXPORT_OK = @EXPORT;
@@ -78,7 +78,7 @@ my $cache_expire = 1000;
 sub new {
   my ($class, $db_file) = @_;
 
-  if ($#_ <= 0 && $_[0] !~ /^[\w:]+$/) {
+  if (!defined $_[0] || $_[0] !~ /^[\w:]+$/) {
     $class = 'Geo::IPfree';
     $db_file = $_[0];
   }
@@ -345,7 +345,7 @@ Geo::IPfree - Look up country of IP Address. This module make this off-line and 
   ... or ...
   
   use Geo::IPfree;  
-  my $GeoIP = Geo::IPfree::new(); ## Using the default DB!
+  my $GeoIP = Geo::IPfree->new(); ## Using the default DB!
   my ($country,$country_name) = $GeoIP->LookUp("64.236.24.28");
 
 =head1 DESCRIPTION
