@@ -1,17 +1,17 @@
 Revision history for Perl extension Geo::IPfree.
 
-0.6 XXX
+0.6  Mon May 11 2009
     - fix awful - yet popular - usage of Geo::IPfree::new (RT #45192)
       corrected docs to use ->new instead
     - more dist cleanup
 
-0.5 Feb 03 2009
+0.5  Tue Feb 03 2009
     - include Memoize in prereqs for older perls
 
-0.4 Dec 01 2008
+0.4  Mon Dec 01 2008
     - fix "undef" test
 
-0.3 Nov 19 2008
+0.3  Wed Nov 19 2008
     - Add webgeo2ipct script (RT #40938)
     - Add new data file (RT #40938, #7663)
     - Fix all warnings (RT #24333)
@@ -21,12 +21,12 @@ Revision history for Perl extension Geo::IPfree.
     - /tmp removed from possible db locations.
     - Dist cleanup.
 
-0.2 Sat Mar 22 18:10 2003
+0.2  Sat Mar 22 18:10 2003
     - Change sysread() to read() for better portability.
     - Speed improvement for multiples LookUp().
       4 times faster!
 
-0.01.1  Nov 6 14:05:03 2002
+0.01.1  Wed Nov 6 14:05:03 2002
     - Fix seek bug for Perl 5.6.0 on multiples LookUp().
    
 0.01  Sun Oct 20 01:07:01 2002
