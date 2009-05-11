@@ -228,10 +228,6 @@ sub Faster {
     memoize( 'dec2baseX' );
     memoize( 'baseX2dec' );
 
-    ## Too many memory and not soo fast:
-    #memoize('ip2nb');
-    #memoize('nb2ip');
-
     $this->{ FASTER } = 1;
 }
 
