@@ -4,6 +4,7 @@ Revision history for Perl extension Geo::IPfree.
     - Removed webgeo2ipct.pl script as you can now download a suitable file
       straight from the web: http://software77.net/geo-ip/
     - Updated database: Tue Sep  8 06:40:01 2009 UTC
+    - Fix undef warning in Faster(); (RT #49468)
 
 0.6  Mon May 11 2009
     - fix awful - yet popular - usage of Geo::IPfree::new (RT #45192)

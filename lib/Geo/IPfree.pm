@@ -107,8 +107,6 @@ sub LoadDB {
         Carp::croak( "Can't load database, blank or not there: $db_file" );
     }
 
-    $this->{ db } = $db_file;
-
     my ( $handler, $buffer );
     $buffer = 0;
     open( $handler, $db_file )
@@ -214,6 +212,9 @@ sub Faster {
 
     seek( $this->{ handler }, 0, 0 );                 ## Fix bug on Perl 5.6.0
     seek( $this->{ handler }, $this->{ start }, 0 );
+
+    $this->{ DB } = '';
+
     1 while (
         read(
             $this->{ handler },
