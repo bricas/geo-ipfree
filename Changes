@@ -6,6 +6,7 @@ Revision history for Perl extension Geo::IPfree.
     - Updated database: Tue Sep  8 06:40:01 2009 UTC
     - Fix undef warning in Faster(); (RT #49468)
     - Tidy up benchmark script
+    - Tidy up txt<->dat conversion scripts
 
 0.6  Mon May 11 2009
     - fix awful - yet popular - usage of Geo::IPfree::new (RT #45192)
