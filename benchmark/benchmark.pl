@@ -1,34 +1,27 @@
 #!/usr/bin/perl
 
-use Benchmark ;
+use strict;
+use warnings;
+
+use Benchmark;
 use Geo::IPfree;
 
-my $GEO = Geo::IPfree->new() ;
-
-$GEO->Faster ;
-
-timethese (5000, {t1 => sub { &TEST ;} });
-
-sub TEST {
-  my @ret = $GEO->LookUp(rand_ip()) ;
-#  print ">> @ret\n" ;
-#  Geo::IPfree::LookUp(rand_ip()) ;
-#  Geo::IPfree::LookUp(rand_ip()) ;
-#  Geo::IPfree::LookUp(rand_ip()) ;
-#  Geo::IPfree::LookUp(rand_ip()) ;
-#  Geo::IPfree::LookUp(rand_ip()) ;
+my $geo = Geo::IPfree->new();
+if( defined $ENV{ GEOIP_FASTER } ) {
+    print "Geo::IPfree->Faster enabled.\n";
+    $geo->Faster;
+}
+else {
+    print "Geo::IPfree->Faster not enabled, set GEOIP_FASTER=1 to benchmark it.\n";
 }
 
-###########
-# RAND_IP #
-###########
+timethese( 5000,
+    { geo_lookup => sub { my @ret = $geo->LookUp( rand_ip() ); } } );
 
 sub rand_ip {
-  return( int(rand(255)) .'.'. int(rand(255)) .'.'. int(rand(255)) .'.'. int(rand(255))) ;
+    return join( '.',
+        int( rand( 255 ) ),
+        int( rand( 255 ) ),
+        int( rand( 255 ) ),
+        int( rand( 255 ) ) );
 }
-
-#######
-# END #
-#######
-
-
