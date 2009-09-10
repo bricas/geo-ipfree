@@ -4,78 +4,51 @@ use strict;
 use warnings;
 
 require Geo::IPfree;
+use IO::Handle;
 
 ##################################
 # CONVERT TXT TO IPSCOUNTRY.DAT  #
 ##################################
 
-my $ipstxt_fl = $ARGV[ 0 ] || './ips-ascii.txt';
-my $ipsdb_fl  = $ARGV[ 1 ] || './ipscountry.dat';
+my $in_fname  = $ARGV[ 0 ] || './ips-ascii.txt';
+my $out_fname = $ARGV[ 1 ] || './ipscountry.dat';
 
 my $HEADERS_BLKS = 256;
 
-my @baseX  = (
-    0 .. 9,
-    'A' .. 'Z',
-    'a' .. 'z',
-    split( m{}, q(.,;'"`<>{}[]=+-~*@#%$&!?) )
-);
-
-my ( %baseX, $base );
-
-{
-    my $c = 0;
-    %baseX = map { $_ => ( $c++ ) } @baseX;
-    $base = @baseX;
-}
-
-if ( $ARGV[ 0 ] =~ /^-+h/i || $#ARGV < 1 ) {
-    print qq`
-_________________________________________________________
-
-This tool will convert the ASCII database (from ipct2txt)
+if ( !@ARGV || $ARGV[ 0 ] =~ m{^-[h?]}i ) {
+    print qq`This tool will convert the ASCII database (from ipct2txt)
 to Geo::IPfree dat file.
 
-  USE: perl $0 ./ips-ascii.txt ./ipscountry.dat
-
-Enjoy! :-P
-_________________________________________________________
+    USAGE: perl $0 ./ips-ascii.txt ./ipscountry.dat
 `;
 
     exit;
 }
 
+print "Reading ${in_fname} ...\n";
+
+open( my $in_fh, $in_fname ) or die "unable to open '${in_fname}': $!";
+
 my @DB;
+while ( my $line = <$in_fh> ) {
+    my ( $country, $ip ) = $line =~ m{^([\w-]{2}):\s+(\d+\.\d+\.\d+\.\d+)}gs;
 
-print "Reading...\n";
-
-open( LOG, $ipstxt_fl );
-while ( my $line = <LOG> ) {
-    my ( $country, $ip0, $ip1 )
-        = (
-        $line =~ /([\w-]{2}):\s+(\d+\.\d+\.\d+\.\d+)\s+(\d+\.\d+\.\d+\.\d+)/gs
-        );
-
-    my $range   = Geo::IPfree::ip2nb( $ip0 );
+    my $range   = Geo::IPfree::ip2nb( $ip );
     my $iprange = Geo::IPfree::dec2baseX( $range );
 
-    push( @DB, "$country$iprange" );
+    unshift( @DB, "${country}${iprange}" );
 }
-close( LOG );
+close( $in_fh );
 
-@DB = reverse @DB;
-
-my ( %headers, $c );
+my %headers;
+my $c   = 0;
 my $pos = 0;
-
-my $blk_sz = int( ( $#DB + 1 ) / $HEADERS_BLKS );
+my $blk_sz = int( @DB / $HEADERS_BLKS );
 
 print "BLK size: $blk_sz\n";
 
 foreach my $DB_i ( @DB ) {
     if ( $c == 0 ) {
-
-        #my $country = substr($DB_i , 0 , 2) ;
         my $iprange = substr( $DB_i, 2 );
         my $range = Geo::IPfree::baseX2dec( $iprange );
         $headers{ $range } = $pos;
@@ -86,20 +59,18 @@ foreach my $DB_i ( @DB ) {
     $pos += 7;
 }
 
-print "Saving...\n";
+print "Saving ${out_fname} ...\n";
 
-open( NEWLOG, ">$ipsdb_fl" );
-my $sel = select( NEWLOG );
-$| = 1;
-select( $sel );
+open( my $out_fh, '>', $out_fname ) or die "unable to open '${out_fname}': $!";
+$out_fh->autoflush( 1 );
 
-my $date = &get_date;
+my $date = get_date();
 
-print NEWLOG
+print $out_fh
     qq`###############################################################
 ## IPs COUNTRY DATABASE ($date)                ##
 ###############################################################
-## This is the database used in the Perl module GeoIPfree.   ##
+## This is the database used in the Perl module Geo::IPfree. ##
 ##                                                           ##
 ## FORMAT:                                                   ##
 ##                                                           ##
@@ -113,41 +84,23 @@ print NEWLOG
 ##     nnnnn -> the IP range using a base of 85 digits       ##
 ##              (not in dec or hex to get space).            ##
 ##                                                           ##
-##  To convert this file to another format see the tool      ##
-##  ipct2txt.pl in the same directory of Geo/IPfree.pm       ##
+##  To convert this file back to plain text, see the         ##
+##  ipct2txt.pl script shipped with Geo-IPfree.              ##
 ##                                                           ##
-## See CPAN for updates...                                   ##
+## Check CPAN for updates...                                 ##
 ###############################################################
-
 `;
 
-print NEWLOG "\n##headers##";
-my $headers;
-foreach my $Key ( sort { $b <=> $a } keys %headers ) {
-    $headers .= "$Key=$headers{$Key}#";
-}
-print NEWLOG length( $headers ) . "##$headers";
+my $header = join( '#', map { "$_=$headers{$_}" } sort { $b <=> $a } keys %headers );
+print $out_fh "\n##headers##" . length( $header ) . "##${header}";
+print $out_fh "\n\n##start##";
+print $out_fh $_ for @DB;
+close( $out_fh );
 
-print NEWLOG "\n\n##start##";
-foreach my $DB_i ( @DB ) { print NEWLOG $DB_i; }
-
-print "\nOK! $ipsdb_fl created\n";
+print "Done.\n";
 
 sub get_date {
+    my ( $sec, $min, $hour, $mday, $mon, $year ) = localtime( time );
 
-    my ( $sec, $min, $hour, $mday, $mon, $year, $wday, $yday, $isdst )
-        = localtime( time );
-
-    $mon++;
-    $year += 1900;
-
-    $sec  = "0$sec"  if $sec < 10;
-    $min  = "0$min"  if $min < 10;
-    $hour = "0$hour" if $hour < 10;
-
-    $mday = "0$mday" if $mday < 10;
-    $mon  = "0$mon"  if $mon < 10;
-
-    return ( "$year-$mon-$mday $hour:$min:$sec" );
+    return sprintf( '%d-%02d-%02d %02d:%02d:%02d', $year + 1900, $mon + 1, $mday, $hour, $min, $sec );
 }
-

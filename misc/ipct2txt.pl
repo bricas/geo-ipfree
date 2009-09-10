@@ -12,13 +12,6 @@ require Geo::IPfree;
 my $in_fname  = $ARGV[ 0 ] || './ipscountry.dat';
 my $out_fname = $ARGV[ 1 ] || './ips-ascii.txt';
 
-my @baseX  = (
-    0 .. 9,
-    'A' .. 'Z',
-    'a' .. 'z',
-    split( m{}, q(.,;'"`<>{}[]=+-~*@#%$&!?) )
-);
-
 if ( !@ARGV || $ARGV[ 0 ] =~ m{^-[h?]}i ) {
     print qq`This tool will convert a Geo::IPfree dat file to ASCII.
 
