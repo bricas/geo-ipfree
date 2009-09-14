@@ -9,7 +9,7 @@ use Carp qw();
 require Exporter;
 our @ISA = qw(Exporter);
 
-our $VERSION = '0.6';
+our $VERSION = '0.7';
 
 our @EXPORT    = qw(LookUp LoadDB);
 our @EXPORT_OK = @EXPORT;
