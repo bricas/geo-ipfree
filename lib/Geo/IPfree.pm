@@ -278,7 +278,6 @@ sub nb2ip {
         my $c  = $x / 256;
         my $ci = int( $x / 256 );
 
-        #push(@ip, $x - ($ci*256));
         push( @ip, $x - ( $ci << 8 ) );
         $x = $ci;
     }
@@ -339,61 +338,81 @@ __END__
 
 =head1 NAME
 
-Geo::IPfree - Look up country of IP Address. This module make this off-line and the DB of IPs is free & small.
+Geo::IPfree - Look up the country of an IPv4 address
 
 =head1 SYNOPSIS
 
     use Geo::IPfree;
-    my ($country,$country_name) = Geo::IPfree::LookUp("192.168.0.1");
-
-    ... or ...
-
-    use Geo::IPfree qw(LookUp);
-    my ($country,$country_name) = LookUp("200.176.3.142");
-
-    ... or ...
-
-    use Geo::IPfree;
-    my $GeoIP = Geo::IPfree->new('/GeoIPfree/ipscountry.dat');
-    $GeoIP->Faster; ## Enable the faster option.
-    my ($country,$country_name,$ip) = $GeoIP->LookUp("www.cnn.com"); ## Getting by Hostname.
-
-    $GeoIP->LoadDB('/GeoIPfree/ips.dat');
-
-    my ($country,$country_name,$ip) = $GeoIP->LookUp("www.sf.net"); ## Getting by Hostname.
-
-    ... or ...
-
-    use Geo::IPfree;  
-    my $GeoIP = Geo::IPfree->new(); ## Using the default DB!
-    my ($country,$country_name) = $GeoIP->LookUp("64.236.24.28");
+    
+    my $geo = Geo::IPfree->new;
+    my( $code1, $name1 ) = $geo->LookUp( '200.176.3.142' );
+    
+    # use memory to speed things up
+    $geo->Faster;
+    
+    # lookup by hostname
+    my( $code2, $name2, $ip2 ) = $geo->LookUp( 'www.cnn.com' );
 
 =head1 DESCRIPTION
 
-This package comes with it's own database to look up the IP's country, and is totally free.
+Geo::IPfree is a Perl module that determines the originating country of an
+arbitrary IPv4 address. It uses a local file-based database to provide basic
+geolocation services.
+
+An updated version of the database can be obtained by visiting the Webnet77 
+website: L<http://software77.net/geo-ip/>.
   
 =head1 METHODS
 
-=head2 LoadDB
+=head2 new( [$db] )
+
+Creates a new Geo::IPfree instance. Optionally, a database filename may be
+passed in to load a custom data set rather than the version shipped with the
+module.
+
+=head2 LoadDB( $filename )
 
 Load the database to use to LookUp the IPs.
 
-=head2 LookUp
+=head2 LookUp( $ip|$hostname )
 
-Returns the ISO 3166 country (XX) code for an IP address or Hostname.
+Given an ip address or a hostname, this function returns three things:
 
-**If you send a Hostname you will need to be connected to the internet to resolve the host IP.
+=over 4
 
-=head2 Clean_Cache
+=item * The ISO 3166 country code (2 chars)
 
-Clean the memory used by the cache.
+=item * The country name
 
-=head2 Faster
+=item * The IP address resolved
+
+=back
+
+B<NB:> In order to use the location services on a hostname, you will need
+to have an internet connection to resolve a host to an IP address.
+
+=head2 Clean_Cache( )
+
+Clears any cached lookup data.
+
+=head2 Faster( )
 
 Make the LookUp() faster, good for big amount of LookUp()s. This will load all the DB in the memory (639Kb) and read from there,
 not from HD (good way for slow HD or network disks), but use more memory. The module "Memoize" will be enabled for some internal functions too.
 
 Note that if you make a big amount of querys to LookUp(), in the end the amount of memory can be big, than is better to use more memory from the begin and make all faster.
+
+=head2 nslookup( )
+
+=head2 find_db_file( )
+
+=head2 ip2nb( )
+
+=head2 nb2ip( )
+
+=head2 dec2baseX( )
+
+=head2 baseX2dec( )
 
 =head1 VARS
 
@@ -453,6 +472,14 @@ The module looks for C<ipscountry.dat> in the following locations:
 =item * through @INC (as well as all @INC directories plus "/Geo")
 
 =item * from the same location that IPfree.pm was loaded
+
+=back
+
+=head1 SEE ALSO
+
+=over 4
+
+=item * http://software77.net/geo-ip/
 
 =back
 
