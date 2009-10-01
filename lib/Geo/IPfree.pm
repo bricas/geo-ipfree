@@ -14,9 +14,9 @@ our $VERSION = '0.7';
 our @EXPORT    = qw(LookUp LoadDB);
 our @EXPORT_OK = @EXPORT;
 
-my $DEFAULT_DB = 'ipscountry.dat';
+my $DEFAULT_DB   = 'ipscountry.dat';
 my $cache_expire = 1000;
-my @baseX      = (
+my @baseX        = (
     0 .. 9,
     'A' .. 'Z',
     'a' .. 'z',
@@ -31,7 +31,7 @@ my ( %baseX, $base, $THIS, %countrys );
     $base = @baseX;
 
     my @data;
-    while( <DATA> ) {
+    while ( <DATA> ) {
         last if m{^__END__};
         chomp;
         push @data, split m{ }, $_, 2;
@@ -50,7 +50,7 @@ sub new {
     my $this = {};
     bless( $this, $class );
 
-    if ( !defined $db_file ) { $db_file = &find_db_file; }
+    if ( !defined $db_file ) { $db_file = _find_db_file(); }
 
     $this->{ dbfile } = $db_file;
 
@@ -59,6 +59,21 @@ sub new {
     $this->{ cache } = 1;
 
     return ( $this );
+}
+
+sub _find_db_file {
+    my @locations = (
+        qw(/usr/local/share /usr/local/share/GeoIPfree),
+        map { $_, "$_/Geo" } @INC
+    );
+
+    # lastly, find where this module was loaded, and try that dir
+    my ( $lib ) = ( $INC{ 'Geo/IPfree.pm' } =~ /^(.*?)[\\\/]+[^\\\/]+$/gs );
+    push @locations, $lib;
+
+    for my $file ( map { "$_/$DEFAULT_DB" } @locations ) {
+        return $file if -e $file;
+    }
 }
 
 sub LoadDB {
@@ -208,92 +223,55 @@ sub nslookup {
     return ( join( ".", @ip ) );
 }
 
-sub find_db_file {
-    my @locations = (
-        qw(/usr/local/share /usr/local/share/GeoIPfree),
-        map { $_, "$_/Geo" } @INC
-    );
-
-    # lastly, find where this module was loaded, and try that dir
-    my ( $lib ) = ( $INC{ 'Geo/IPfree.pm' } =~ /^(.*?)[\\\/]+[^\\\/]+$/gs );
-    push @locations, $lib;
-
-    for my $file ( map { "$_/$DEFAULT_DB" } @locations ) {
-        return $file if -e $file;
-    }
-}
-
 sub ip2nb {
     my @ip = split( /\./, $_[ 0 ] );
-    return ( ( $ip[ 0 ] << 24 ) 
-        + ( $ip[ 1 ] << 16 ) 
-            + ( $ip[ 2 ] << 8 )
-            + $ip[ 3 ] );
+    return ( $ip[ 0 ] << 24 ) + ( $ip[ 1 ] << 16 ) + ( $ip[ 2 ] << 8 )
+        + $ip[ 3 ];
 }
 
 sub nb2ip {
-    my ( $ipn ) = @_;
-
+    my ( $input ) = @_;
     my @ip;
 
-    my $x = $ipn;
-
-    while ( $x > 1 ) {
-        my $c  = $x / 256;
-        my $ci = int( $x / 256 );
-
-        push( @ip, $x - ( $ci << 8 ) );
-        $x = $ci;
+    while ( $input > 1 ) {
+        my $int = int( $input / 256 );
+        push @ip, $input - ( $int << 8 );
+        $input = $int;
     }
 
-    push( @ip, $x ) if $x > 0;
+    push @ip, $input if $input > 0;
+    push @ip, ( 0 ) x ( 4 - @ip );
 
-    while ( $#ip < 3 ) { push( @ip, 0 ); }
-
-    @ip = reverse( @ip );
-
-    return ( join( ".", @ip ) );
+    return join( '.', reverse @ip );
 }
 
 sub dec2baseX {
     my ( $dec ) = @_;
-
     my @base;
-    my $x = $dec;
 
-    while ( $x > 1 ) {
-        my $c  = $x / $base;
-        my $ci = int( $x / $base );
-        push( @base, $x - ( $ci * $base ) );
-        $x = $ci;
+    while ( $dec > 1 ) {
+        my $int = int( $dec / $base );
+        push @base, $dec - $int * $base;
+        $dec = $int;
     }
 
-    push( @base, $x ) if $x > 0;
+    push @base, $dec if $dec > 0;
+    push @base, ( 0 ) x ( 5 - @base );
 
-    while ( $#base < 4 ) { push( @base, 0 ); }
-
-    my $baseX;
-
-    foreach my $base_i ( reverse @base ) {
-        $baseX .= $baseX[ $base_i ];
-    }
-
-    return ( $baseX );
+    return join( '', map { $baseX[ $_ ] } reverse @base );
 }
 
 sub baseX2dec {
-    my ( $baseX ) = @_;
+    my ( $input ) = @_;
 
-    my @base = split( "", $baseX );
-    my $dec;
+    my @digits = reverse split( '', $input );
+    my $dec = 0;
 
-    my $i = -1;
-    foreach my $base_i ( reverse @base ) {
-        $i++;
-        $dec += $baseX{ $base_i } * ( $base**$i );
+    foreach ( 0 .. @digits - 1 ) {
+        $dec += $baseX{ $digits[ $_ ] } * ( $base**$_ );
     }
 
-    return ( $dec );
+    return $dec;
 }
 
 1;
@@ -616,8 +594,6 @@ not from HD (good way for slow HD or network disks), but use more memory. The mo
 Note that if you make a big amount of querys to LookUp(), in the end the amount of memory can be big, than is better to use more memory from the begin and make all faster.
 
 =head2 nslookup( )
-
-=head2 find_db_file( )
 
 =head2 ip2nb( )
 
