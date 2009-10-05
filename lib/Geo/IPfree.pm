@@ -214,13 +214,13 @@ sub Faster {
 sub Clean_Cache { delete $_[ 0 ]->{ CACHE }; 1; }
 
 sub nslookup {
-    my ( $host ) = @_;
+    my ( $host, $last_lookup ) = @_;
     require Socket;
-    my $iaddr = Socket::inet_aton( $host );
-    $iaddr = '' if !defined $iaddr;
+    my $iaddr = Socket::inet_aton( $host ) || '';
     my @ip = unpack( 'C4', $iaddr );
-    if ( !@ip && !$_[ 1 ] ) { return ( &nslookup( "www.$host", 1 ) ); }
-    return ( join( ".", @ip ) );
+
+    return nslookup( "www.${host}", 1 ) if !@ip && !$last_lookup;
+    return join( '.', @ip );
 }
 
 sub ip2nb {
@@ -593,15 +593,27 @@ not from HD (good way for slow HD or network disks), but use more memory. The mo
 
 Note that if you make a big amount of querys to LookUp(), in the end the amount of memory can be big, than is better to use more memory from the begin and make all faster.
 
-=head2 nslookup( )
+=head2 nslookup( $host, [$last_lookup] )
 
-=head2 ip2nb( )
+Attempts to resolve a hostname to an IP address. If it fails on the first pass
+it will attempt to resolve the same hostname with 'www.' prepended. C<$last_lookup>
+is used to supress this behavior.
 
-=head2 nb2ip( )
+=head2 ip2nb( $ip )
 
-=head2 dec2baseX( )
+Encodes C<$ip> into a numerical representation.
 
-=head2 baseX2dec( )
+=head2 nb2ip( $number )
+
+Decodes C<$number> back to an IP address.
+
+=head2 dec2baseX( $number )
+
+Converts a base 10 (decimal) number to base 85.
+
+=head2 baseX2dec( $number )
+
+Converts a base 85 number to base 10 (decimal).
 
 =head1 VARS
 
