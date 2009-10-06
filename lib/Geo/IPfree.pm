@@ -9,7 +9,7 @@ use Carp qw();
 require Exporter;
 our @ISA = qw(Exporter);
 
-our $VERSION = '0.7';
+our $VERSION = '0.8';
 
 our @EXPORT    = qw(LookUp LoadDB);
 our @EXPORT_OK = @EXPORT;
@@ -47,8 +47,7 @@ sub new {
         $db_file = $_[ 0 ];
     }
 
-    my $this = {};
-    bless( $this, $class );
+    my $this = bless( {}, $class );
 
     if ( !defined $db_file ) { $db_file = _find_db_file(); }
 
@@ -58,7 +57,7 @@ sub new {
 
     $this->{ cache } = 1;
 
-    return ( $this );
+    return $this;
 }
 
 sub _find_db_file {
