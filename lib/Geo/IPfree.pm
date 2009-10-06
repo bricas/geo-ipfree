@@ -608,11 +608,11 @@ Decodes C<$number> back to an IP address.
 
 =head2 dec2baseX( $number )
 
-Converts a base 10 (decimal) number to base 85.
+Converts a base 10 (decimal) number to base 86.
 
 =head2 baseX2dec( $number )
 
-Converts a base 85 number to base 10 (decimal).
+Converts a base 86 number to base 10 (decimal).
 
 =head1 VARS
 
