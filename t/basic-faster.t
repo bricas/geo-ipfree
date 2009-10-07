@@ -1,7 +1,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 11;
+use Test::More tests => 13;
 
 use Geo::IPfree;
 my $g = Geo::IPfree->new;
@@ -43,3 +43,8 @@ SKIP: {    # does not exist
         if @result == 3;
     is( scalar @result, 0, 'undef result' );
 }
+
+# rudimentary cache check
+ok( $g->{ CACHE }, 'cache exists' );
+$g->Clean_Cache;
+ok( !$g->{ CACHE }, 'cache cleared' );
