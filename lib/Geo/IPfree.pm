@@ -297,6 +297,7 @@ AS American Samoa
 AT Austria
 AU Australia
 AW Aruba
+AX Aland Islands
 AZ Azerbaijan
 BA Bosnia and Herzegovina
 BB Barbados
@@ -330,6 +331,7 @@ CM Cameroon
 CN China
 CO Colombia
 CR Costa Rica
+CS Serbia and Montenegro
 CU Cuba
 CV Cape Verde
 CX Christmas Island
@@ -361,6 +363,7 @@ GB United Kingdom
 GD Grenada
 GE Georgia
 GF French Guiana
+GG Guernsey
 GH Ghana
 GI Gibraltar
 GL Greenland
@@ -383,12 +386,14 @@ HU Hungary
 ID Indonesia
 IE Ireland
 IL Israel
+IM Isle of Man
 IN India
 IO British Indian Ocean Territory
 IQ Iraq
 IR Iran, Islamic Republic of
 IS Iceland
 IT Italy
+JE Jersey
 JM Jamaica
 JO Jordan
 JP Japan
@@ -417,6 +422,8 @@ LY Libyan Arab Jamahiriya
 MA Morocco
 MC Monaco
 MD Moldova, Republic of
+ME Montenegro
+MF Saint Martin
 MG Madagascar
 MH Marshall Islands
 MK Macedonia, the Former Yugoslav Republic of
@@ -465,6 +472,7 @@ PY Paraguay
 QA Qatar
 RE Reunion
 RO Romania
+RS Serbia
 RU Russian Federation
 RW Rwanda
 SA Saudi Arabia
@@ -504,6 +512,7 @@ TW Taiwan, Province of China
 TZ Tanzania, United Republic of
 UA Ukraine
 UG Uganda
+UK United Kingdom
 UM United States Minor Outlying Islands
 US United States
 UY Uruguay
@@ -519,10 +528,9 @@ WF Wallis and Futuna
 WS Samoa
 YE Yemen
 YT Mayotte
-YU Yugoslavia
+YU Serbia and Montenegro (Formally Yugoslavia)
 ZA South Africa
 ZM Zambia
-ZR Zaire
 ZW Zimbabwe
 __END__
 

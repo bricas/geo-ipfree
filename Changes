@@ -1,8 +1,10 @@
 Revision history for Perl extension Geo::IPfree.
 
-0.8  XXX
-    - Code and Docs cleanup
+0.8  Wed Oct 07 2009
+    - Code and documentation cleanup
     - Added some new tests
+    - Updated list of country codes
+    - Updated database: Wed Oct  7 06:40:02 2009 UTC
 
 0.7  Mon Sep 14 2009
     - Removed webgeo2ipct.pl script as you can now download a suitable file
