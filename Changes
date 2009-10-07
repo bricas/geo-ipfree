@@ -2,6 +2,7 @@ Revision history for Perl extension Geo::IPfree.
 
 0.8  XXX
     - Code and Docs cleanup
+    - Added some new tests
 
 0.7  Mon Sep 14 2009
     - Removed webgeo2ipct.pl script as you can now download a suitable file
