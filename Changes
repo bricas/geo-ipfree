@@ -1,5 +1,8 @@
 Revision history for Perl extension Geo::IPfree.
 
+0.9  XXX
+    - Added Timor-Leste country code: .tl
+
 0.8  Wed Oct 07 2009
     - Code and documentation cleanup
     - Added some new tests

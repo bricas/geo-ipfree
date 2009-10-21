@@ -9,7 +9,7 @@ use Carp qw();
 require Exporter;
 our @ISA = qw(Exporter);
 
-our $VERSION = '0.8';
+our $VERSION = '0.9';
 
 our @EXPORT    = qw(LookUp LoadDB);
 our @EXPORT_OK = @EXPORT;
@@ -501,6 +501,7 @@ TG Togo
 TH Thailand
 TJ Tajikistan
 TK Tokelau
+TL Timor-Leste
 TM Turkmenistan
 TN Tunisia
 TO Tonga
