@@ -51,8 +51,6 @@ sub new {
 
     if ( !defined $db_file ) { $db_file = _find_db_file(); }
 
-    $this->{ dbfile } = $db_file;
-
     $this->LoadDB( $db_file );
 
     $this->{ cache } = 1;
@@ -85,22 +83,20 @@ sub LoadDB {
         Carp::croak( "Can't load database, blank or not there: $db_file" );
     }
 
-    my ( $handler, $buffer );
-    $buffer = 0;
-    open( $handler, $db_file )
+    my $buffer = '';
+    open( my $handler, '<', $db_file )
         || Carp::croak( "Failed to open database file $db_file for read!" );
     binmode( $handler );
+    $this->{ dbfile } = $db_file;
 
-    if ( $this->{ pos } ) { delete( $this->{ pos } ); }
+    delete $this->{ pos } if $this->{ pos };
 
     while ( read( $handler, $buffer, 1, length( $buffer ) ) ) {
         if ( $buffer =~ /##headers##(\d+)##$/s ) {
             my $headers;
             read( $handler, $headers, $1 );
             my ( %head ) = ( $headers =~ /(\d+)=(\d+)/gs );
-            foreach my $Key ( keys %head ) {
-                $this->{ pos }{ $Key } = $head{ $Key };
-            }
+            $this->{ pos }{ $_ } = $head{ $_ } for keys %head;
             $buffer = '';
         }
         elsif ( $buffer =~ /##start##$/s ) {
@@ -109,9 +105,7 @@ sub LoadDB {
         }
     }
 
-    @{ $this->{ searchorder } }
-        = ( sort { $a <=> $b } keys %{ $this->{ pos } } );
-
+    $this->{ searchorder } = [ sort { $a <=> $b } keys %{ $this->{ pos } } ];
     $this->{ handler } = $handler;
 }
 
@@ -161,7 +155,7 @@ sub LookUp {
             $country = substr( $buffer,       0,        2 );
             $iprange = baseX2dec( substr( $buffer, 2, 5 ) );
             $buf_pos += 7;
-            if ( $ipnb >= $iprange ) { last; }
+            last if $ipnb >= $iprange;
         }
     }
     ## Will read the DB in the disk:
@@ -172,14 +166,14 @@ sub LookUp {
         while ( read( $this->{ handler }, $buffer, 7 ) ) {
             $country = substr( $buffer, 0, 2 );
             $iprange = baseX2dec( substr( $buffer, 2 ) );
-            if ( $ipnb >= $iprange ) { last; }
+            last if $ipnb >= $iprange;
         }
     }
 
     if ( $this->{ cache } ) {
         $this->{ CACHE }{ $ip_class } = [ $country, $countrys{ $country } ];
         $this->{ CACHE }{ x }++;
-        if ( $this->{ CACHE }{ x } > $cache_expire ) { $this->Clean_Cache; }
+        $this->Clean_Cache if $this->{ CACHE }{ x } > $cache_expire;
     }
 
     return ( $country, $countrys{ $country }, $ip_class );
@@ -187,21 +181,12 @@ sub LookUp {
 
 sub Faster {
     my $this = shift;
+    my $handler = $this->{ handler };
 
-    seek( $this->{ handler }, 0, 0 );                 ## Fix bug on Perl 5.6.0
-    seek( $this->{ handler }, $this->{ start }, 0 );
+    seek( $handler, 0, 0 );                 ## Fix bug on Perl 5.6.0
+    seek( $handler, $this->{ start }, 0 );
 
-    $this->{ DB } = '';
-
-    1 while (
-        read(
-            $this->{ handler },
-            $this->{ DB },
-            1024 * 4,
-            length( $this->{ DB } )
-        )
-    );
-
+    $this->{ DB } = do { local $/; <$handler>; };
     $this->{ DB_SIZE } = length( $this->{ DB } );
 
     memoize( 'dec2baseX' );
