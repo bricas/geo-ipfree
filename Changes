@@ -1,27 +1,27 @@
 Revision history for Perl extension Geo::IPfree.
 
-1.110450 Mon 14 Feb 2011
+1.110450 2011-02-14
     - Updated database: Mon Feb 14 06:40:01 2011 UTC.
 
-1.102870 Thu 14 Oct 2010
+1.102870 2010-10-14
     - Updated database: Thu Oct 14 06:40:01 2010 UTC.
 
-1.101650 Mon 14 Jun 2010
+1.101650 2010-06-14
     - Minor code and test cleanup
     - Updated database: Mon Jun 14 06:40:01 2010 UTC.
 
-1.100470 Tue 16 Feb 2010
+1.100470 2010-02-16
     - Added Timor-Leste country code: .tl
     - Updated database: Tue Feb 16 06:40:01 2010 UTC
     - Using date-based version number
 
-0.8  Wed Oct 07 2009
+0.8 2009-10-07
     - Code and documentation cleanup
     - Added some new tests
     - Updated list of country codes
     - Updated database: Wed Oct  7 06:40:02 2009 UTC
 
-0.7  Mon Sep 14 2009
+0.7 2009-09-14
     - Removed webgeo2ipct.pl script as you can now download a suitable file
       straight from the web: http://software77.net/geo-ip/
     - Updated database: Tue Sep  8 06:40:01 2009 UTC
@@ -29,18 +29,18 @@ Revision history for Perl extension Geo::IPfree.
     - Tidy up benchmark script
     - Tidy up txt<->dat conversion scripts
 
-0.6  Mon May 11 2009
+0.6 2009-05-11
     - fix awful - yet popular - usage of Geo::IPfree::new (RT #45192)
       corrected docs to use ->new instead
     - more dist cleanup
 
-0.5  Tue Feb 03 2009
+0.5 2009-02-03
     - include Memoize in prereqs for older perls
 
-0.4  Mon Dec 01 2008
+0.4 2008-12-01
     - fix "undef" test
 
-0.3  Wed Nov 19 2008
+0.3 2009-11-19
     - Add webgeo2ipct script (RT #40938)
     - Add new data file (RT #40938, #7663)
     - Fix all warnings (RT #24333)
@@ -50,14 +50,14 @@ Revision history for Perl extension Geo::IPfree.
     - /tmp removed from possible db locations.
     - Dist cleanup.
 
-0.2  Sat Mar 22 18:10 2003
+0.2 2003-03-22
     - Change sysread() to read() for better portability.
     - Speed improvement for multiples LookUp().
       4 times faster!
 
-0.01.1  Wed Nov 6 14:05:03 2002
+0.011 2002-11-06
     - Fix seek bug for Perl 5.6.0 on multiples LookUp().
    
-0.01  Sun Oct 20 01:07:01 2002
+0.01 2002-10-20
     - Released the 1st version!
 
