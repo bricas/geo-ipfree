@@ -8,13 +8,13 @@ use Geo::IPfree;
 {    # localhost
     my ( $country, $country_name, $ip ) = Geo::IPfree::LookUp( '127.0.0.1' );
     is( $country, 'ZZ' );
-    ok( !defined $country_name );
+    is( $country_name, 'Reserved for private IP addresses' );
 }
 
 {    # intranet
     my ( $country, $country_name, $ip ) = Geo::IPfree::LookUp( '10.0.0.1' );
     is( $country, 'ZZ' );
-    ok( !defined $country_name );
+    is( $country_name, 'Reserved for private IP addresses' );
 }
 
 {    # www.nic.br
