@@ -1,5 +1,10 @@
 Revision history for Perl extension Geo::IPfree.
 
+1.112490 2011-09-06
+    - Add a "country name" for code ZZ (private IP addresses) (Neil Bowers)
+    - Various POD improvements (Neil Bowers)
+    - Updated database: Tue Sep  6 06:40:01 2011 UTC.
+
 1.111650 2011-06-14
     - Updated database: Tue Jun 14 06:40:01 2011 UTC.
 

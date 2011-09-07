@@ -9,7 +9,7 @@ use Carp qw();
 require Exporter;
 our @ISA = qw(Exporter);
 
-our $VERSION = '1.111650';
+our $VERSION = '1.112490';
 
 our @EXPORT    = qw(LookUp LoadDB);
 our @EXPORT_OK = @EXPORT;
@@ -518,6 +518,7 @@ YU Serbia and Montenegro (Formally Yugoslavia)
 ZA South Africa
 ZM Zambia
 ZW Zimbabwe
+ZZ Reserved for private IP addresses
 __END__
 
 =head1 NAME
@@ -556,11 +557,11 @@ module.
 
 =head2 LoadDB( $filename )
 
-Load the database to use to LookUp the IPs.
+Load a specific database to use to look up the IP addresses.
 
-=head2 LookUp( $ip|$hostname )
+=head2 LookUp( $ip | $hostname )
 
-Given an ip address or a hostname, this function returns three things:
+Given an IP address or a hostname, this function returns three things:
 
 =over 4
 
@@ -575,16 +576,20 @@ Given an ip address or a hostname, this function returns three things:
 B<NB:> In order to use the location services on a hostname, you will need
 to have an internet connection to resolve a host to an IP address.
 
+If you pass a private IP address (for example 192.168.0.1), you'll get back a country
+code of ZZ, and country name of "Reserved for private IP addresses".
+
 =head2 Clean_Cache( )
 
 Clears any cached lookup data.
 
 =head2 Faster( )
 
-Make the LookUp() faster, good for big amount of LookUp()s. This will load all the DB in the memory (639Kb) and read from there,
-not from HD (good way for slow HD or network disks), but use more memory. The module "Memoize" will be enabled for some internal functions too.
+Make the LookUp() faster, which is good if you're going to be calling Lookup() many times. This will load the entire DB into memory and read from there,
+not from disk (good way for slow disk or network disks), but use more memory. The module "Memoize" will be enabled for some internal functions too.
 
-Note that if you make a big amount of querys to LookUp(), in the end the amount of memory can be big, than is better to use more memory from the begin and make all faster.
+Note that if you call Lookup() many times, you'll end up using a lot of memory anyway, so you'll be better off using a lot of memory from the start by calling Faster(),
+and getting an improvement for all calls.
 
 =head2 nslookup( $host, [$last_lookup] )
 
@@ -626,10 +631,10 @@ The database file path.
 
 =item $GeoIP->{cache} BOOLEAN
 
-Set/tell if the cache of LookUp() is on. If it's on it will cache the last 1000 querys. Default: 1
+Set/tell if the cache of LookUp() is on. If it's on it will cache the last 1000 queries. Default: 1
 
 The cache is good when you are parsing a list of IPs, generally a web log.
-If in the log you have many lines with the same IP, GEO::IPfree don't need to make a full search for each query,
+If in the log you have many lines with the same IP, GEO::IPfree won't have to make a full search for each query,
 it will cache the last 1000 different IPs. After each 1000 IPs the cache is cleaned to restart it.
 
 Note that the Lookup make the query without the last IP number (xxx.xxx.xxx.0),
@@ -639,9 +644,9 @@ then the cache for the IP 192.168.0.1 will be the same for 192.168.0.2 (they are
 
 =head1 DB FORMAT
 
-the DB has a list of IP ranges & countrys, for example, from 200.128.0.0 to
+The data file has a list of IP ranges & countries, for example, from 200.128.0.0 to
 200.103.255.255 the IPs are from BR. To make a fast access to the DB the format
-try to use less bytes per input (block). The file was in ASCII and in blocks
+tries to use less bytes per input (block). The file was in ASCII and in blocks
 of 7 bytes: XXnnnnn
 
   XX    -> the country code (BR,US...)
@@ -652,7 +657,7 @@ See CPAN for updates of the DB...
 
 =head1 NOTES
 
-The file ipscountry.dat is made only for Geo::IPfree and has their own format.
+The file ipscountry.dat is a dedicated format for Geo::IPfree.
 To convert it see the tool "ipct2txt.pl" in the C<misc> directoy.
 
 The module looks for C<ipscountry.dat> in the following locations:
