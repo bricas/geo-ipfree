@@ -475,6 +475,7 @@ SM San Marino
 SN Senegal
 SO Somalia
 SR Suriname
+SS South Sudan
 ST Sao Tome and Principe
 SV El Salvador
 SY Syrian Arab Republic
