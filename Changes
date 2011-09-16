@@ -1,5 +1,8 @@
 Revision history for Perl extension Geo::IPfree.
 
+TO BE RELEASED
+    - Added South Sudan country code: .ss
+
 1.112490 2011-09-06
     - Add a "country name" for code ZZ (private IP addresses) (Neil Bowers)
     - Various POD improvements (Neil Bowers)
