@@ -33,8 +33,8 @@ $g->Faster;
 
 {    # www.nic.fr
     my ( $country, $country_name, $ip ) = $g->LookUp( '192.134.4.20' );
-    is( $country,      'EU' );
-    is( $country_name, 'Europe' );
+    is( $country,      'FR' );
+    is( $country_name, 'France' );
 }
 
 SKIP: {    # does not exist
