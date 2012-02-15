@@ -1,5 +1,8 @@
 Revision history for Perl extension Geo::IPfree.
 
+1.120460 2012-02-15
+    - Updated database: Wed Feb 15 06:40:01 2012 UTC.
+
 1.112870 2011-10-14
     - Added South Sudan country code: .ss
     - Updated database: Fri Oct 14 06:40:01 2011 UTC.
