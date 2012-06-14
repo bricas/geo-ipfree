@@ -1,5 +1,8 @@
 Revision history for Perl extension Geo::IPfree.
 
+1.121660 2012-06-14
+    - Updated database: Thu Jun 14 06:40:01 2012 UTC.
+
 1.120460 2012-02-15
     - Updated database: Wed Feb 15 06:40:01 2012 UTC.
     - Fix tests due to updated data
