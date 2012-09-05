@@ -296,6 +296,7 @@ BJ Benin
 BM Bermuda
 BN Brunei Darussalam
 BO Bolivia
+BQ Bonaire, Sint Eustatius and Saba
 BR Brazil
 BS Bahamas
 BT Bhutan
