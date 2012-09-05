@@ -1,5 +1,8 @@
 Revision history for Perl extension Geo::IPfree.
 
+TO BE RELEASED
+    - Added Bonaire, Sint Eustatius and Saba country code: BQ
+
 1.121660 2012-06-14
     - Updated database: Thu Jun 14 06:40:01 2012 UTC.
 
