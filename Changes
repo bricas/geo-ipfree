@@ -2,6 +2,7 @@ Revision history for Perl extension Geo::IPfree.
 
 1.130110 2013-01-11
     - Added Sint Maarten country code: SX
+    - Updated database: Fri Jan 11 06:40:01 2013 UTC.
 
 1.122880 2012-10-14
     - Updated database: Sun Oct 14 06:40:02 2012 UTC.
