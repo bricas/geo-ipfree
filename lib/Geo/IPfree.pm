@@ -9,7 +9,7 @@ use Carp qw();
 require Exporter;
 our @ISA = qw(Exporter);
 
-our $VERSION = '1.122880';
+our $VERSION = '1.130110';
 
 our @EXPORT    = qw(LookUp LoadDB);
 our @EXPORT_OK = @EXPORT;
@@ -479,6 +479,7 @@ SR Suriname
 SS South Sudan
 ST Sao Tome and Principe
 SV El Salvador
+SX Sint Maarten
 SY Syrian Arab Republic
 SZ Swaziland
 TC Turks and Caicos Islands
