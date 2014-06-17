@@ -1,7 +1,8 @@
 Revision history for Perl extension Geo::IPfree.
 
-NEXT
+1.141670 2014-06-16
     - Spelling fix (RT #93091)
+    - Updated database: Mon Jun 16 06:40:01 2014 UTC.
 
 1.140470 2014-02-16
     - Updated database: Sun Feb 16 06:40:01 2014 UTC.
