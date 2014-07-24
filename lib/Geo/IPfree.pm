@@ -266,6 +266,7 @@ L0 localhost
 I0 IntraNet
 A1 Anonymous Proxy
 A2 Satellite Provider
+AC Ascension Island
 AD Andorra
 AE United Arab Emirates
 AF Afghanistan
@@ -293,13 +294,15 @@ BG Bulgaria
 BH Bahrain
 BI Burundi
 BJ Benin
+BL Saint Barthelemy
 BM Bermuda
 BN Brunei Darussalam
-BO Bolivia
+BO Bolivia, Plurinational State of
 BQ Bonaire, Sint Eustatius and Saba
 BR Brazil
 BS Bahamas
 BT Bhutan
+BU Burma
 BV Bouvet Island
 BW Botswana
 BY Belarus
@@ -310,16 +313,18 @@ CD Congo, The Democratic Republic of the
 CF Central African Republic
 CG Congo
 CH Switzerland
-CI Cote D'Ivoire
+CI Cote d'Ivoire
 CK Cook Islands
 CL Chile
 CM Cameroon
 CN China
 CO Colombia
+CP Clipperton Island
 CR Costa Rica
 CS Serbia and Montenegro
 CU Cuba
 CV Cape Verde
+CW Curacao
 CX Christmas Island
 CY Cyprus
 CZ Czech Republic
@@ -404,19 +409,19 @@ LS Lesotho
 LT Lithuania
 LU Luxembourg
 LV Latvia
-LY Libyan Arab Jamahiriya
+LY Libya
 MA Morocco
 MC Monaco
 MD Moldova, Republic of
 ME Montenegro
-MF Saint Martin
+MF Saint Martin (French part)
 MG Madagascar
 MH Marshall Islands
 MK Macedonia, the Former Yugoslav Republic of
 ML Mali
 MM Myanmar
 MN Mongolia
-MO Macau
+MO Macao
 MP Northern Mariana Islands
 MQ Martinique
 MR Mauritania
@@ -451,7 +456,7 @@ PL Poland
 PM Saint Pierre and Miquelon
 PN Pitcairn
 PR Puerto Rico
-PS Palestinian Territory, Occupied
+PS Palestine, State of
 PT Portugal
 PW Palau
 PY Paraguay
@@ -462,12 +467,13 @@ RS Serbia
 RU Russian Federation
 RW Rwanda
 SA Saudi Arabia
-SB SolomonIslands
+SB Solomon Islands
 SC Seychelles
 SD Sudan
 SE Sweden
+SF Finland
 SG Singapore
-SH Saint Helena
+SH Saint Helena, Ascension and Tristan da Cunha
 SI Slovenia
 SJ Svalbard and Jan Mayen
 SK Slovakia
@@ -479,7 +485,7 @@ SR Suriname
 SS South Sudan
 ST Sao Tome and Principe
 SV El Salvador
-SX Sint Maarten
+SX Sint Maarten (Dutch part)
 SY Syrian Arab Republic
 SZ Swaziland
 TC Turks and Caicos Islands
@@ -508,10 +514,10 @@ UY Uruguay
 UZ Uzbekistan
 VA Holy See (Vatican City State)
 VC Saint Vincent and the Grenadines
-VE Venezuela
+VE Venezuela, Bolivarian Republic of
 VG Virgin Islands, British
 VI Virgin Islands, U.S.
-VN Vietnam
+VN Viet Nam
 VU Vanuatu
 WF Wallis and Futuna
 WS Samoa
@@ -520,6 +526,7 @@ YT Mayotte
 YU Serbia and Montenegro (Formally Yugoslavia)
 ZA South Africa
 ZM Zambia
+ZR Zaire
 ZW Zimbabwe
 ZZ Reserved for private IP addresses
 __END__

@@ -1,5 +1,8 @@
 Revision history for Perl extension Geo::IPfree.
 
+TBD
+    - Updated country codes and names (including reservations)
+
 1.141670 2014-06-16
     - Spelling fix (RT #93091)
     - Updated database: Mon Jun 16 06:40:01 2014 UTC.
