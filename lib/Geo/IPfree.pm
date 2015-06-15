@@ -15,7 +15,7 @@ our @EXPORT    = qw(LookUp LoadDB);
 our @EXPORT_OK = @EXPORT;
 
 my $DEFAULT_DB   = 'ipscountry.dat';
-my $cache_expire = 1000;
+my $cache_expire = 5000;
 my @baseX        = (
     0 .. 9,
     'A' .. 'Z',
@@ -53,6 +53,7 @@ sub new {
 
     $this->LoadDB( $db_file );
 
+    $this->Clean_Cache();
     $this->{ cache } = 1;
 
     return $this;
@@ -171,9 +172,15 @@ sub LookUp {
     }
 
     if ( $this->{ cache } ) {
+        if( $this->{ CACHE_COUNT } > $cache_expire ) {
+            keys %{ $this->{ CACHE } };
+            my( $d_key ) = each( %{ $this->{ CACHE } } );
+            delete $this->{ CACHE }{ $d_key };
+        }
+        else {
+            $this->{ CACHE_COUNT }++;
+        }
         $this->{ CACHE }{ $ip_class } = [ $country, $countrys{ $country } ];
-        $this->{ CACHE }{ x }++;
-        $this->Clean_Cache if $this->{ CACHE }{ x } > $cache_expire;
     }
 
     return ( $country, $countrys{ $country }, $ip_class );
@@ -195,7 +202,12 @@ sub Faster {
     $this->{ FASTER } = 1;
 }
 
-sub Clean_Cache { delete $_[ 0 ]->{ CACHE }; 1; }
+sub Clean_Cache {
+    my $this = shift;
+    $this->{ CACHE_COUNT } = 0;
+    delete $this->{ CACHE };
+    return 1;
+}
 
 sub nslookup {
     my ( $host, $last_lookup ) = @_;
@@ -641,11 +653,12 @@ The database file path.
 
 =item $GeoIP->{cache} BOOLEAN
 
-Set/tell if the cache of LookUp() is on. If it's on it will cache the last 1000 queries. Default: 1
+Set/tell if the cache of LookUp() is on. If it's on it will cache the last 5000 queries. Default: 1
 
 The cache is good when you are parsing a list of IPs, generally a web log.
 If in the log you have many lines with the same IP, GEO::IPfree won't have to make a full search for each query,
-it will cache the last 1000 different IPs. After each 1000 IPs the cache is cleaned to restart it.
+it will cache the last 5000 different IPs. After 5000 IPs an existing IP is removed from the cache and the new
+data is stored.
 
 Note that the Lookup make the query without the last IP number (xxx.xxx.xxx.0),
 then the cache for the IP 192.168.0.1 will be the same for 192.168.0.2 (they are the same query, 192.168.0.0).
