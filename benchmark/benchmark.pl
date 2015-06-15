@@ -6,17 +6,24 @@ use warnings;
 use Benchmark;
 use Geo::IPfree;
 
-my $geo = Geo::IPfree->new();
-if( defined $ENV{ GEOIP_FASTER } ) {
-    print "Geo::IPfree->Faster enabled.\n";
-    $geo->Faster;
-}
-else {
-    print "Geo::IPfree->Faster not enabled, set GEOIP_FASTER=1 to benchmark it.\n";
-}
+my $count = shift || 5000;
+my @ips;
+push @ips, rand_ip() for 1..$count;
+@ips = (@ips) x 2;
+my @ips_faster = @ips;
 
-timethese( 5000,
-    { geo_lookup => sub { my @ret = $geo->LookUp( rand_ip() ); } } );
+my $geo = Geo::IPfree->new();
+$geo->{ cache } = 0;
+
+my $geo_faster = Geo::IPfree->new();
+$geo_faster->Faster();
+
+timethese( $count * 2,
+    {
+        geo => sub { $geo->LookUp( pop @ips ); },
+        geo_faster => sub { $geo_faster->LookUp( pop @ips_faster ); }
+    }
+);
 
 sub rand_ip {
     return join( '.',
