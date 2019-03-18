@@ -133,7 +133,7 @@ sub LookUp {
 
     ## Since the last class is always from the same country, will try 0 and cache 0:
     my $ip_class = $ip;
-    $ip_class =~ s/\.\d+$/\.0/;
+    # $ip_class =~ s/\.\d+$/\.0/;
 
     if ( $this->{ cache } && $this->{ CACHE }{ $ip_class } ) {
         return ( @{ $this->{ CACHE }{ $ip_class } }, $ip_class );
