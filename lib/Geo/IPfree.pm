@@ -3,7 +3,6 @@ use 5.006;
 use strict;
 use warnings;
 
-use Memoize;
 use Carp qw();
 
 require Exporter;
@@ -23,12 +22,17 @@ my @baseX        = (
     split( m{}, q(.,;'"`<>{}[]=+-~*@#%$&!?) )
 );
 
-my ( %baseX, $base, $THIS, %countrys );
+my ( %baseX, $base, $THIS, %countrys, $base0, $base1, $base2, $base3, $base4 );
 
 {
     my $c = 0;
     %baseX = map { $_ => ( $c++ ) } @baseX;
     $base = @baseX;
+    $base0  = $base**0;
+    $base1  = $base**1;
+    $base2  = $base**2;
+    $base3  = $base**3;
+    $base4  = $base**4;
 
     my @data;
     while ( <DATA> ) {
@@ -125,9 +129,9 @@ sub LookUp {
 
     my ( $ip ) = @_;
 
-    $ip =~ s/\.+/\./gs;
-    $ip =~ s/^\.//;
-    $ip =~ s/\.$//;
+    $ip =~ s/\.+/\./gs if index($ip,'..') > -1;
+    substr($ip,0,1,'') if substr($ip,0,1) eq '.';
+    chop $ip if substr($ip,-1) eq '.';
 
     if ( $ip !~ /^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$/ ) {
         $ip = nslookup( $ip );
@@ -151,27 +155,30 @@ sub LookUp {
         if ( $ipnb <= $Key ) { $buf_pos = $this->{ pos }{ $Key }; last; }
     }
 
-    my ( $buffer, $country, $iprange );
+    my ( $buffer, $country, $iprange, $basex2 );
 
     ## Will use the DB in the memory:
-    if ( $this->{ FASTER } ) {
-        while ( $buf_pos < $this->{ DB_SIZE } ) {
-            $buffer  = substr( $this->{ DB }, $buf_pos, 7 );
-            $country = substr( $buffer,       0,        2 );
-            $iprange = baseX2dec( substr( $buffer, 2, 5 ) );
+    if ( $this->{FASTER} ) {
+        my $base_cache = $this->{'baseX2dec'} ||= {};
+        while ( $buf_pos < $this->{DB_SIZE} ) {
+            if ( $ipnb >= ( $base_cache->{ ( $basex2 = substr( $this->{DB}, $buf_pos + 2, 5 ) ) } ||= baseX2dec($basex2) ) ) {
+                $country = substr( $this->{DB}, $buf_pos, 2 );
+                last;
+            }
             $buf_pos += 7;
-            last if $ipnb >= $iprange;
         }
+        $country ||= substr( $this->{DB}, $buf_pos-7, 2 );
     }
     ## Will read the DB in the disk:
     else {
-        seek( $this->{ handler }, 0, 0 )
-            if $] < 5.006001;    ## Fix bug on Perl 5.6.0
-        seek( $this->{ handler }, $buf_pos + $this->{ start }, 0 );
-        while ( read( $this->{ handler }, $buffer, 7 ) ) {
-            $country = substr( $buffer, 0, 2 );
-            $iprange = baseX2dec( substr( $buffer, 2 ) );
-            last if $ipnb >= $iprange;
+        seek( $this->{handler}, 0, 0 )
+          if $] < 5.006001;    ## Fix bug on Perl 5.6.0
+        seek( $this->{handler}, $buf_pos + $this->{start}, 0 );
+        while ( read( $this->{handler}, $buffer, 7 ) ) {
+            if ( $ipnb >= baseX2dec( substr( $buffer, 2 ) ) ) {
+                $country = substr( $buffer, 0, 2 );
+                last;
+            }
         }
     }
 
@@ -199,10 +206,6 @@ sub Faster {
 
     $this->{ DB } = do { local $/; <$handler>; };
     $this->{ DB_SIZE } = length( $this->{ DB } );
-
-    memoize( 'dec2baseX' );
-    memoize( 'baseX2dec' );
-
     $this->{ FASTER } = 1;
 }
 
@@ -210,6 +213,7 @@ sub Clean_Cache {
     my $this = shift;
     $this->{ CACHE_COUNT } = 0;
     delete $this->{ CACHE };
+    delete $this->{'baseX2dec'};
     return 1;
 }
 
@@ -262,16 +266,16 @@ sub dec2baseX {
 }
 
 sub baseX2dec {
-    my ( $input ) = @_;
-
-    my @digits = reverse split( '', $input );
-    my $dec = 0;
-
-    foreach ( 0 .. @digits - 1 ) {
-        $dec += $baseX{ $digits[ $_ ] } * ( $base**$_ );
-    }
-
-    return $dec;
+    my $string = reverse $_[0];
+    my $length = length $string;
+    return    #
+      (
+        0 + ( $length > 4 ? ( $baseX{ substr( $string, 4, 1 ) } * $base4 ) : 0 ) +    #
+          ( $length > 3 ? ( $baseX{ substr( $string, 3, 1 ) } * $base3 ) : 0 ) +      #
+          ( $length > 2 ? ( $baseX{ substr( $string, 2, 1 ) } * $base2 ) : 0 ) +      #
+          ( $length > 1 ? ( $baseX{ substr( $string, 1, 1 ) } * $base1 ) : 0 ) +      #
+          ( $length     ? ( $baseX{ substr( $string, 0, 1 ) } * $base0 ) : 0 )        #
+      );                                                                              #
 }
 
 1;
