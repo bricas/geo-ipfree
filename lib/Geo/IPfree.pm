@@ -59,6 +59,10 @@ sub new {
     return $this;
 }
 
+sub get_all_countries {
+     return { %countrys }; # copy
+}
+
 sub _find_db_file {
     my @locations = (
         qw(/usr/local/share /usr/local/share/GeoIPfree),
@@ -634,6 +638,25 @@ Converts a base 10 (decimal) number to base 86.
 =head2 baseX2dec( $number )
 
 Converts a base 86 number to base 10 (decimal).
+
+=head2 get_all_countries()
+
+Returns one Hash Ref with the list of known countries.
+The key is the ISO 3166 country code (2 chars) and the value the country name in english.
+
+Example:
+
+         {
+           '--' => 'N/A',
+           'A1' => 'Anonymous Proxy',
+           'A2' => 'Satellite Provider',
+           'AC' => 'Ascension Island',
+           'AD' => 'Andorra',
+           'AE' => 'United Arab Emirates',
+           'AF' => 'Afghanistan',
+           'AG' => 'Antigua and Barbuda',
+           ...
+        }
 
 =head1 VARS
 
