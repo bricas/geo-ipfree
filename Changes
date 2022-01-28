@@ -2,6 +2,8 @@ Revision history for Perl extension Geo::IPfree.
 
 {{$NEXT}}
 
+1.16      2022-01-28 16:29:44-07:00 America/Denver
+
     - Add Kosovo to the list of supported countries
     - Add get_all_countries helper
     - Remove Memoize dependency and make Faster faster
