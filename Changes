@@ -1,5 +1,11 @@
 Revision history for Perl extension Geo::IPfree.
 
+{{$NEXT}}
+
+    - Add Kosovo to the list of supported countries
+    - Add get_all_countries helper
+    - Remove Memoize dependency and make Faster faster
+
 1.151940 2015-07-13
     - Cache limit increased to 5000 entries
     - Instead of a full cache clear, only 1 item is pushed off the end of
