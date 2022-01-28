@@ -19,7 +19,6 @@ WriteMakefile(
     ),
     PREREQ_PM => {
         'Test::More' => '0.47',
-        'Memoize'    => 0,
     },
     (   eval { ExtUtils::MakeMaker->VERSION(6.46) }
         ? ( META_MERGE => {

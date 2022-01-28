@@ -1,7 +1,6 @@
 #!perl
 
 requires "Carp" => "0";
-requires "Memoize" => "0";
 requires "ExtUtils::MakeMaker" => "0";
 
 on "test" => sub {
@@ -10,6 +9,7 @@ on "test" => sub {
 
 on "recommends" => sub {
     requires "Test::CPAN::Meta"          => "0";
+    requires "Test::Pod::Coverage"       => "0";
     requires "Test::NoTabs"              => "0";
     requires "Test2::Bundle::Extended"   => "0";
     requires "Test2::Tools::Explain"     => "0";
