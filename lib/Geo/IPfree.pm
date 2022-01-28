@@ -537,6 +537,7 @@ VN Viet Nam
 VU Vanuatu
 WF Wallis and Futuna
 WS Samoa
+XK Kosovo
 YE Yemen
 YT Mayotte
 YU Serbia and Montenegro (Formally Yugoslavia)
