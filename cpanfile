@@ -1,17 +1,17 @@
 #!perl
 
-requires "Carp" => "0";
-requires "ExtUtils::MakeMaker" => "0";
+requires "Carp";
+requires "ExtUtils::MakeMaker";
 
 on "test" => sub {
-    requires "Test::More"                => "0";
-};
+    requires "Test::More";
 
-on "recommends" => sub {
-    requires "Test::CPAN::Meta"          => "0";
-    requires "Test::Pod::Coverage"       => "0";
-    requires "Test::NoTabs"              => "0";
-    requires "Test2::Bundle::Extended"   => "0";
-    requires "Test2::Tools::Explain"     => "0";
-    requires "Test2::Plugin::NoWarnings" => "0";
+    recommends "Test::Code::TidyAll";
+    recommends "Test::CPAN::Meta";
+    recommends "Test::Pod::Coverage";
+    recommends "Test::NoTabs";
+    recommends "Test2::Bundle::Extended";
+    recommends "Test2::Tools::Explain";
+    recommends "Test2::Plugin::NoWarnings";
+    recommends "Pod::Tidy";
 };

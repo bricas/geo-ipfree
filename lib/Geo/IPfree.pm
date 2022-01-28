@@ -9,6 +9,7 @@ require Exporter;
 our @ISA = qw(Exporter);
 
 # VERSION
+# ABSTRACT: Geo::IPfree - Look up the country of an IPv4 address
 
 our @EXPORT    = qw(LookUp LoadDB);
 our @EXPORT_OK = @EXPORT;
@@ -27,15 +28,15 @@ my ( %baseX, $base, $THIS, %countrys, $base0, $base1, $base2, $base3, $base4 );
 {
     my $c = 0;
     %baseX = map { $_ => ( $c++ ) } @baseX;
-    $base = @baseX;
-    $base0  = $base**0;
-    $base1  = $base**1;
-    $base2  = $base**2;
-    $base3  = $base**3;
-    $base4  = $base**4;
+    $base  = @baseX;
+    $base0 = $base**0;
+    $base1 = $base**1;
+    $base2 = $base**2;
+    $base3 = $base**3;
+    $base4 = $base**4;
 
     my @data;
-    while ( <DATA> ) {
+    while (<DATA>) {
         last if m{^__END__};
         chomp;
         push @data, split m{ }, $_, 2;
@@ -46,25 +47,25 @@ my ( %baseX, $base, $THIS, %countrys, $base0, $base1, $base2, $base3, $base4 );
 sub new {
     my ( $class, $db_file ) = @_;
 
-    if ( !defined $_[ 0 ] || $_[ 0 ] !~ /^[\w:]+$/ ) {
+    if ( !defined $_[0] || $_[0] !~ /^[\w:]+$/ ) {
         $class   = 'Geo::IPfree';
-        $db_file = $_[ 0 ];
+        $db_file = $_[0];
     }
 
     my $this = bless( {}, $class );
 
     if ( !defined $db_file ) { $db_file = _find_db_file(); }
 
-    $this->LoadDB( $db_file );
+    $this->LoadDB($db_file);
 
     $this->Clean_Cache();
-    $this->{ cache } = 1;
+    $this->{cache} = 1;
 
     return $this;
 }
 
 sub get_all_countries {
-     return { %countrys }; # copy
+    return {%countrys};    # copy
 }
 
 sub _find_db_file {
@@ -74,7 +75,7 @@ sub _find_db_file {
     );
 
     # lastly, find where this module was loaded, and try that dir
-    my ( $lib ) = ( $INC{ 'Geo/IPfree.pm' } =~ /^(.*?)[\\\/]+[^\\\/]+$/gs );
+    my ($lib) = ( $INC{'Geo/IPfree.pm'} =~ /^(.*?)[\\\/]+[^\\\/]+$/gs );
     push @locations, $lib;
 
     for my $file ( map { "$_/$DEFAULT_DB" } @locations ) {
@@ -84,38 +85,38 @@ sub _find_db_file {
 
 sub LoadDB {
     my $this = shift;
-    my ( $db_file ) = @_;
+    my ($db_file) = @_;
 
     if ( -d $db_file ) { $db_file .= "/$DEFAULT_DB"; }
 
     if ( !-s $db_file ) {
-        Carp::croak( "Can't load database, blank or not there: $db_file" );
+        Carp::croak("Can't load database, blank or not there: $db_file");
     }
 
     my $buffer = '';
     open( my $handler, '<', $db_file )
-        || Carp::croak( "Failed to open database file $db_file for read!" );
-    binmode( $handler );
-    $this->{ dbfile } = $db_file;
+      || Carp::croak("Failed to open database file $db_file for read!");
+    binmode($handler);
+    $this->{dbfile} = $db_file;
 
-    delete $this->{ pos } if $this->{ pos };
+    delete $this->{pos} if $this->{pos};
 
-    while ( read( $handler, $buffer, 1, length( $buffer ) ) ) {
+    while ( read( $handler, $buffer, 1, length($buffer) ) ) {
         if ( $buffer =~ /##headers##(\d+)##$/s ) {
             my $headers;
             read( $handler, $headers, $1 );
-            my ( %head ) = ( $headers =~ /(\d+)=(\d+)/gs );
-            $this->{ pos }{ $_ } = $head{ $_ } for keys %head;
+            my (%head) = ( $headers =~ /(\d+)=(\d+)/gs );
+            $this->{pos}{$_} = $head{$_} for keys %head;
             $buffer = '';
         }
         elsif ( $buffer =~ /##start##$/s ) {
-            $this->{ start } = tell( $handler );
+            $this->{start} = tell($handler);
             last;
         }
     }
 
-    $this->{ searchorder } = [ sort { $a <=> $b } keys %{ $this->{ pos } } ];
-    $this->{ handler } = $handler;
+    $this->{searchorder} = [ sort { $a <=> $b } keys %{ $this->{pos} } ];
+    $this->{handler}     = $handler;
 }
 
 sub LookUp {
@@ -127,14 +128,14 @@ sub LookUp {
     }
     else { $this = shift; }
 
-    my ( $ip ) = @_;
+    my ($ip) = @_;
 
-    $ip =~ s/\.+/\./gs if index($ip,'..') > -1;
-    substr($ip,0,1,'') if substr($ip,0,1) eq '.';
-    chop $ip if substr($ip,-1) eq '.';
+    $ip =~ s/\.+/\./gs      if index( $ip, '..' ) > -1;
+    substr( $ip, 0, 1, '' ) if substr( $ip, 0, 1 ) eq '.';
+    chop $ip                if substr( $ip, -1 ) eq '.';
 
     if ( $ip !~ /^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$/ ) {
-        $ip = nslookup( $ip );
+        $ip = nslookup($ip);
     }
 
     return unless length $ip;
@@ -143,16 +144,16 @@ sub LookUp {
     my $ip_class = $ip;
     $ip_class =~ s/\.\d+$/\.0/;
 
-    if ( $this->{ cache } && $this->{ CACHE }{ $ip_class } ) {
-        return ( @{ $this->{ CACHE }{ $ip_class } }, $ip_class );
+    if ( $this->{cache} && $this->{CACHE}{$ip_class} ) {
+        return ( @{ $this->{CACHE}{$ip_class} }, $ip_class );
     }
 
-    my $ipnb = ip2nb( $ip_class );
+    my $ipnb = ip2nb($ip_class);
 
     my $buf_pos = 0;
 
-    foreach my $Key ( @{ $this->{ searchorder } } ) {
-        if ( $ipnb <= $Key ) { $buf_pos = $this->{ pos }{ $Key }; last; }
+    foreach my $Key ( @{ $this->{searchorder} } ) {
+        if ( $ipnb <= $Key ) { $buf_pos = $this->{pos}{$Key}; last; }
     }
 
     my ( $buffer, $country, $iprange, $basex2 );
@@ -167,7 +168,7 @@ sub LookUp {
             }
             $buf_pos += 7;
         }
-        $country ||= substr( $this->{DB}, $buf_pos-7, 2 );
+        $country ||= substr( $this->{DB}, $buf_pos - 7, 2 );
     }
     ## Will read the DB in the disk:
     else {
@@ -182,37 +183,37 @@ sub LookUp {
         }
     }
 
-    if ( $this->{ cache } ) {
-        if( $this->{ CACHE_COUNT } > $cache_expire ) {
-            keys %{ $this->{ CACHE } };
-            my( $d_key ) = each( %{ $this->{ CACHE } } );
-            delete $this->{ CACHE }{ $d_key };
+    if ( $this->{cache} ) {
+        if ( $this->{CACHE_COUNT} > $cache_expire ) {
+            keys %{ $this->{CACHE} };
+            my ($d_key) = each( %{ $this->{CACHE} } );
+            delete $this->{CACHE}{$d_key};
         }
         else {
-            $this->{ CACHE_COUNT }++;
+            $this->{CACHE_COUNT}++;
         }
-        $this->{ CACHE }{ $ip_class } = [ $country, $countrys{ $country } ];
+        $this->{CACHE}{$ip_class} = [ $country, $countrys{$country} ];
     }
 
-    return ( $country, $countrys{ $country }, $ip_class );
+    return ( $country, $countrys{$country}, $ip_class );
 }
 
 sub Faster {
-    my $this = shift;
-    my $handler = $this->{ handler };
+    my $this    = shift;
+    my $handler = $this->{handler};
 
-    seek( $handler, 0, 0 );                 ## Fix bug on Perl 5.6.0
-    seek( $handler, $this->{ start }, 0 );
+    seek( $handler, 0,              0 );    ## Fix bug on Perl 5.6.0
+    seek( $handler, $this->{start}, 0 );
 
-    $this->{ DB } = do { local $/; <$handler>; };
-    $this->{ DB_SIZE } = length( $this->{ DB } );
-    $this->{ FASTER } = 1;
+    $this->{DB}      = do { local $/; <$handler>; };
+    $this->{DB_SIZE} = length( $this->{DB} );
+    $this->{FASTER}  = 1;
 }
 
 sub Clean_Cache {
     my $this = shift;
-    $this->{ CACHE_COUNT } = 0;
-    delete $this->{ CACHE };
+    $this->{CACHE_COUNT} = 0;
+    delete $this->{CACHE};
     delete $this->{'baseX2dec'};
     return 1;
 }
@@ -220,21 +221,20 @@ sub Clean_Cache {
 sub nslookup {
     my ( $host, $last_lookup ) = @_;
     require Socket;
-    my $iaddr = Socket::inet_aton( $host ) || '';
-    my @ip = unpack( 'C4', $iaddr );
+    my $iaddr = Socket::inet_aton($host) || '';
+    my @ip    = unpack( 'C4', $iaddr );
 
     return nslookup( "www.${host}", 1 ) if !@ip && !$last_lookup;
     return join( '.', @ip );
 }
 
 sub ip2nb {
-    my @ip = split( /\./, $_[ 0 ] );
-    return ( $ip[ 0 ] << 24 ) + ( $ip[ 1 ] << 16 ) + ( $ip[ 2 ] << 8 )
-        + $ip[ 3 ];
+    my @ip = split( /\./, $_[0] );
+    return ( $ip[0] << 24 ) + ( $ip[1] << 16 ) + ( $ip[2] << 8 ) + $ip[3];
 }
 
 sub nb2ip {
-    my ( $input ) = @_;
+    my ($input) = @_;
     my @ip;
 
     while ( $input > 1 ) {
@@ -244,13 +244,13 @@ sub nb2ip {
     }
 
     push @ip, $input if $input > 0;
-    push @ip, ( 0 ) x ( 4 - @ip );
+    push @ip, (0) x ( 4 - @ip );
 
     return join( '.', reverse @ip );
 }
 
 sub dec2baseX {
-    my ( $dec ) = @_;
+    my ($dec) = @_;
     my @base;
 
     while ( $dec > 1 ) {
@@ -260,9 +260,9 @@ sub dec2baseX {
     }
 
     push @base, $dec if $dec > 0;
-    push @base, ( 0 ) x ( 5 - @base );
+    push @base, (0) x ( 5 - @base );
 
-    return join( '', map { $baseX[ $_ ] } reverse @base );
+    return join( '', map { $baseX[$_] } reverse @base );
 }
 
 sub baseX2dec {
