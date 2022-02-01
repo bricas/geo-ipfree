@@ -2,6 +2,8 @@ Revision history for Perl extension Geo::IPfree.
 
 {{$NEXT}}
 
+1.160000  2022-02-01 11:41:36-07:00 America/Denver
+
     - Preserve incremental version release numbers.
     The previous release number can be consider being
     lower than 1.151940
