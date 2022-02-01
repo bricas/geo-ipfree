@@ -2,6 +2,10 @@ Revision history for Perl extension Geo::IPfree.
 
 {{$NEXT}}
 
+    - Preserve incremental version release numbers.
+    The previous release number can be consider being
+    lower than 1.151940
+
 1.16      2022-01-28 16:29:44-07:00 America/Denver
 
     - Add Kosovo to the list of supported countries

@@ -4,7 +4,7 @@ Geo::IPfree - Geo::IPfree - Look up the country of an IPv4 address
 
 # VERSION
 
-version 1.16
+version 1.160000
 
 # SYNOPSIS
 
