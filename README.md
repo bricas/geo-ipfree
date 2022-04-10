@@ -155,7 +155,7 @@ See CPAN for updates of the DB...
 # NOTES
 
 The file ipscountry.dat is a dedicated format for Geo::IPfree.
-To convert it see the tool "ipct2txt.pl" in the `misc` directoy.
+To convert it see the tool "ipct2txt.pl" in the `misc` directory.
 
 The module looks for `ipscountry.dat` in the following locations:
 
