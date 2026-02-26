@@ -140,15 +140,11 @@ sub LookUp {
 
     return unless length $ip;
 
-    ## Since the last class is always from the same country, will try 0 and cache 0:
-    my $ip_class = $ip;
-    $ip_class =~ s/\.\d+$/\.0/;
-
-    if ( $this->{cache} && $this->{CACHE}{$ip_class} ) {
-        return ( @{ $this->{CACHE}{$ip_class} }, $ip_class );
+    if ( $this->{cache} && $this->{CACHE}{$ip} ) {
+        return ( @{ $this->{CACHE}{$ip} }, $ip );
     }
 
-    my $ipnb = ip2nb($ip_class);
+    my $ipnb = ip2nb($ip);
 
     my $buf_pos = 0;
 
@@ -192,10 +188,10 @@ sub LookUp {
         else {
             $this->{CACHE_COUNT}++;
         }
-        $this->{CACHE}{$ip_class} = [ $country, $countrys{$country} ];
+        $this->{CACHE}{$ip} = [ $country, $countrys{$country} ];
     }
 
-    return ( $country, $countrys{$country}, $ip_class );
+    return ( $country, $countrys{$country}, $ip );
 }
 
 sub Faster {
