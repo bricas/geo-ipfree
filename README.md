@@ -27,8 +27,8 @@ Geo::IPfree is a Perl module that determines the originating country of an
 arbitrary IPv4 address. It uses a local file-based database to provide basic
 geolocation services.
 
-An updated version of the database can be obtained by visiting the Webnet77 
-website: [http://software77.net/geo-ip/](http://software77.net/geo-ip/).
+An updated version of the database can be obtained by visiting the Webnet77
+website: [https://web.archive.org/web/2022/http://software77.net/geo-ip/](https://web.archive.org/web/2022/http://software77.net/geo-ip/).
 
 # METHODS
 
@@ -166,7 +166,7 @@ The module looks for `ipscountry.dat` in the following locations:
 
 # SEE ALSO
 
-- http://software77.net/geo-ip/
+- https://web.archive.org/web/2022/http://software77.net/geo-ip/
 
 # MAINTAINER
 
