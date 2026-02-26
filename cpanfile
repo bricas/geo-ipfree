@@ -9,9 +9,6 @@ on "test" => sub {
     recommends "Test::CPAN::Meta";
     recommends "Test::Pod::Coverage";
     recommends "Test::NoTabs";
-    recommends "Test2::Bundle::Extended";
-    recommends "Test2::Tools::Explain";
-    recommends "Test2::Plugin::NoWarnings";
 };
 
 on "develop" => sub {
