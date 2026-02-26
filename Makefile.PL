@@ -19,27 +19,19 @@ my %WriteMakefileArgs = (
         "ExtUtils::MakeMaker" => 0
     },
     "TEST_REQUIRES" => {
-        "ExtUtils::MakeMaker"       => 0,
-        "File::Spec"                => 0,
-        "File::Temp"                => 0,
-        "Test2::Bundle::Extended"   => 0,
-        "Test2::Plugin::NoWarnings" => 0,
-        "Test2::Tools::Explain"     => 0,
-        "Test::More"                => 0
+        "ExtUtils::MakeMaker" => 0,
+        "File::Spec"          => 0,
+        "Test::More"          => 0
     },
     "VERSION" => "1.160001",
     "test"    => { "TESTS" => "t/*.t" }
 );
 
 my %FallbackPrereqs = (
-    "Carp"                      => 0,
-    "ExtUtils::MakeMaker"       => 0,
-    "File::Spec"                => 0,
-    "File::Temp"                => 0,
-    "Test2::Bundle::Extended"   => 0,
-    "Test2::Plugin::NoWarnings" => 0,
-    "Test2::Tools::Explain"     => 0,
-    "Test::More"                => 0
+    "Carp"                => 0,
+    "ExtUtils::MakeMaker" => 0,
+    "File::Spec"          => 0,
+    "Test::More"          => 0
 );
 
 unless ( eval { ExtUtils::MakeMaker->VERSION(6.63_03) } ) {
