@@ -1,7 +1,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 10;
+use Test::More tests => 12;
 
 use Geo::IPfree;
 
@@ -11,6 +11,9 @@ use Geo::IPfree;
 # For example, 195.60.95.0/24 has CY (.0-.127) and GB (.128-.255).
 # Previously, LookUp() normalized every IP to its .0 form before lookup,
 # which meant all IPs in a /24 block returned the same (wrong) country.
+#
+# The fix uses /25 cache granularity: .0 for last octet 0-127, .128 for
+# 128-255. This keeps the cache compact while handling the split correctly.
 
 my $geo = Geo::IPfree->new;
 
@@ -39,6 +42,19 @@ $geo->Clean_Cache;
     # Now look up a higher IP in the same /24 — must not return cached CY
     my ( $cc2 ) = $geo->LookUp('195.60.95.200');
     is( $cc2, 'GB', '195.60.95.200 is GB even after .0 was cached as CY' );
+}
+
+# Verify /25 cache sharing: IPs in the same half share a cache entry
+$geo->Clean_Cache;
+
+{
+    $geo->LookUp('195.60.95.50');    # seeds cache for 0-127 half
+    my ( $cc ) = $geo->LookUp('195.60.95.100');    # same /25 half
+    is( $cc, 'CY', 'IPs in the same /25 half share cache (both CY)' );
+
+    $geo->LookUp('195.60.95.200');    # seeds cache for 128-255 half
+    my ( $cc2 ) = $geo->LookUp('195.60.95.250');    # same /25 half
+    is( $cc2, 'GB', 'IPs in the same /25 half share cache (both GB)' );
 }
 
 # Also verify with Faster mode (in-memory DB)

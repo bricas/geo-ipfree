@@ -140,8 +140,13 @@ sub LookUp {
 
     return unless length $ip;
 
-    if ( $this->{cache} && $this->{CACHE}{$ip} ) {
-        return ( @{ $this->{CACHE}{$ip} }, $ip );
+    ## Cache key uses /25 granularity: .0 for last octet 0-127, .128 for 128-255.
+    ## This fixes lookups in split /24 blocks while keeping cache compact.
+    my $ip_cache = $ip;
+    $ip_cache =~ s/\.(\d+)$/ '.' . ($1 < 128 ? '0' : '128') /e;
+
+    if ( $this->{cache} && $this->{CACHE}{$ip_cache} ) {
+        return ( @{ $this->{CACHE}{$ip_cache} }, $ip );
     }
 
     my $ipnb = ip2nb($ip);
@@ -188,7 +193,7 @@ sub LookUp {
         else {
             $this->{CACHE_COUNT}++;
         }
-        $this->{CACHE}{$ip} = [ $country, $countrys{$country} ];
+        $this->{CACHE}{$ip_cache} = [ $country, $countrys{$country} ];
     }
 
     return ( $country, $countrys{$country}, $ip );
