@@ -2,6 +2,11 @@ Revision history for Perl extension Geo::IPfree.
 
 {{$NEXT}}
 
+    - fix: remove /24 normalization in LookUp that returned wrong country
+    - fix: remove unused test dependencies on Test2:: modules and File::Temp
+    - fix: replace broken software77.net link with Wayback Machine archive
+    - doc: Correct spelling mistakes
+
 1.160000  2022-02-01 11:41:36-07:00 America/Denver
 
     - Preserve incremental version release numbers.
