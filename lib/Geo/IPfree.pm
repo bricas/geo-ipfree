@@ -185,15 +185,14 @@ sub LookUp {
     }
 
     if ( $this->{cache} ) {
-        if ( $this->{CACHE_COUNT} > $cache_expire ) {
+        if ( $this->{CACHE_COUNT} >= $cache_expire ) {
             keys %{ $this->{CACHE} };
             my ($d_key) = each( %{ $this->{CACHE} } );
             delete $this->{CACHE}{$d_key};
-        }
-        else {
-            $this->{CACHE_COUNT}++;
+            $this->{CACHE_COUNT}--;
         }
         $this->{CACHE}{$ip_cache} = [ $country, $countrys{$country} ];
+        $this->{CACHE_COUNT}++;
     }
 
     return ( $country, $countrys{$country}, $ip );
