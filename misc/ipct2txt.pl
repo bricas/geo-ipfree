@@ -23,13 +23,14 @@ if ( !@ARGV || $ARGV[0] =~ m{^-[h?]}i ) {
 
 print "Reading ${in_fname} ...\n";
 
-open( my $in_fh, $in_fname ) or die "unable to open '${in_fname}': $!";
+open( my $in_fh, '<', $in_fname ) or die "unable to open '${in_fname}': $!";
+binmode($in_fh);
 
 my $buffer = '';
-sysread( $in_fh, $buffer, 1, length($buffer) ) while $buffer !~ m{##start##$}s;
+read( $in_fh, $buffer, 1, length($buffer) ) while $buffer !~ m{##start##$}s;
 
 my @IPS;
-while ( sysread( $in_fh, $buffer, 7 ) ) {
+while ( read( $in_fh, $buffer, 7 ) ) {
     my $country = substr( $buffer, 0, 2 );
     my $iprange = substr( $buffer, 2 );
 
