@@ -222,10 +222,14 @@ sub Clean_Cache {
 sub nslookup {
     my ( $host, $last_lookup ) = @_;
     require Socket;
-    my $iaddr = Socket::inet_aton($host) || '';
-    my @ip    = unpack( 'C4', $iaddr );
+    my $iaddr = Socket::inet_aton($host);
 
-    return nslookup( "www.${host}", 1 ) if !@ip && !$last_lookup;
+    if ( !defined $iaddr || $iaddr eq "\0\0\0\0" ) {
+        return nslookup( "www.${host}", 1 ) unless $last_lookup;
+        return '';
+    }
+
+    my @ip = unpack( 'C4', $iaddr );
     return join( '.', @ip );
 }
 
