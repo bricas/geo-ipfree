@@ -55,6 +55,9 @@ to have an internet connection to resolve a host to an IP address.
 If you pass a private IP address (for example 192.168.0.1), you'll get back a country
 code of ZZ, and country name of "Reserved for private IP addresses".
 
+B<NB:> IPv6 addresses are not supported. Passing an IPv6 address (any string
+containing colons) will cause the function to croak.
+
 =head2 Clean_Cache( )
 
 Clears any cached lookup data.
