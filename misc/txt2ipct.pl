@@ -27,7 +27,7 @@ to Geo::IPfree dat file.
 
 print "Reading ${in_fname} ...\n";
 
-open( my $in_fh, $in_fname ) or die "unable to open '${in_fname}': $!";
+open( my $in_fh, '<', $in_fname ) or die "unable to open '${in_fname}': $!";
 
 my @DB;
 while ( my $line = <$in_fh> ) {
