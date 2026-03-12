@@ -134,8 +134,11 @@ sub LookUp {
     substr( $ip, 0, 1, '' ) if substr( $ip, 0, 1 ) eq '.';
     chop $ip                if substr( $ip, -1 ) eq '.';
 
-    if ( $ip !~ /^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$/ ) {
+    if ( $ip !~ /^(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})$/ ) {
         $ip = nslookup($ip);
+    }
+    elsif ( $1 > 255 || $2 > 255 || $3 > 255 || $4 > 255 ) {
+        Carp::croak("Invalid IP address: $ip (octets must be 0-255)");
     }
 
     return unless length $ip;
