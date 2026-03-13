@@ -182,6 +182,7 @@ sub LookUp {
                 last;
             }
         }
+        $country ||= substr( $buffer, 0, 2 ) if defined $buffer;
     }
 
     if ( $this->{cache} ) {
