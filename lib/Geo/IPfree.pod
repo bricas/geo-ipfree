@@ -55,17 +55,22 @@ to have an internet connection to resolve a host to an IP address.
 If you pass a private IP address (for example 192.168.0.1), you'll get back a country
 code of ZZ, and country name of "Reserved for private IP addresses".
 
+An invalid IP address with octets outside the 0-255 range (e.g. "256.1.2.3")
+will cause the method to C<croak>.
+
 =head2 Clean_Cache( )
 
 Clears any cached lookup data.
 
 =head2 Faster( )
 
-Make the LookUp() faster, which is good if you're going to be calling Lookup() many times. This will load the entire DB into memory and read from there,
-not from disk (good way for slow disk or network disks), but use more memory. The module "Memoize" will be enabled for some internal functions too.
+Make the LookUp() faster, which is good if you're going to be calling LookUp()
+many times. This will load the entire DB into memory and read from there,
+not from disk (good for slow disk or network disks), but use more memory.
 
-Note that if you call Lookup() many times, you'll end up using a lot of memory anyway, so you'll be better off using a lot of memory from the start by calling Faster(),
-and getting an improvement for all calls.
+Note that if you call LookUp() many times, you'll end up using a lot of memory
+anyway, so you'll be better off using a lot of memory from the start by calling
+Faster(), and getting an improvement for all calls.
 
 =head2 nslookup( $host, [$last_lookup] )
 
@@ -133,8 +138,10 @@ If in the log you have many lines with the same IP, GEO::IPfree won't have to ma
 it will cache the last 5000 different IPs. After 5000 IPs an existing IP is removed from the cache and the new
 data is stored.
 
-Note that the Lookup make the query without the last IP number (xxx.xxx.xxx.0),
-then the cache for the IP 192.168.0.1 will be the same for 192.168.0.2 (they are the same query, 192.168.0.0).
+Note that the cache uses /25 granularity: IPs 0-127 in the last octet share
+one cache entry, and IPs 128-255 share another. For example, 192.168.0.1 and
+192.168.0.100 share the same cache entry, but 192.168.0.1 and 192.168.0.200
+do not.
 
 =back
 
