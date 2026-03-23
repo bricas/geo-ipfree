@@ -348,7 +348,7 @@ CV Cape Verde
 CW Curacao
 CX Christmas Island
 CY Cyprus
-CZ Czech Republic
+CZ Czechia
 DE Germany
 DJ Djibouti
 DK Denmark
@@ -438,7 +438,7 @@ ME Montenegro
 MF Saint Martin (French part)
 MG Madagascar
 MH Marshall Islands
-MK Macedonia, the Former Yugoslav Republic of
+MK North Macedonia
 ML Mali
 MM Myanmar
 MN Mongolia
@@ -508,7 +508,7 @@ ST Sao Tome and Principe
 SV El Salvador
 SX Sint Maarten (Dutch part)
 SY Syrian Arab Republic
-SZ Swaziland
+SZ Eswatini
 TC Turks and Caicos Islands
 TD Chad
 TF French Southern Territories
