@@ -153,8 +153,21 @@ sub LookUp {
 
     my $buf_pos = 0;
 
-    foreach my $Key ( @{ $this->{searchorder} } ) {
-        if ( $ipnb <= $Key ) { $buf_pos = $this->{pos}{$Key}; last; }
+    ## Binary search on the header index (searchorder) to find the
+    ## starting segment.  Entries are sorted ascending by IP number.
+    my $so = $this->{searchorder};
+    {
+        my ( $lo, $hi ) = ( 0, $#$so );
+        while ( $lo <= $hi ) {
+            my $mid = ( $lo + $hi ) >> 1;
+            if ( $ipnb <= $so->[$mid] ) {
+                $buf_pos = $this->{pos}{ $so->[$mid] };
+                $hi = $mid - 1;
+            }
+            else {
+                $lo = $mid + 1;
+            }
+        }
     }
 
     my ( $buffer, $country, $iprange, $basex2 );
@@ -162,14 +175,33 @@ sub LookUp {
     ## Will use the DB in the memory:
     if ( $this->{FASTER} ) {
         my $base_cache = $this->{'baseX2dec'} ||= {};
-        while ( $buf_pos < $this->{DB_SIZE} ) {
-            if ( $ipnb >= ( $base_cache->{ ( $basex2 = substr( $this->{DB}, $buf_pos + 2, 5 ) ) } ||= baseX2dec($basex2) ) ) {
-                $country = substr( $this->{DB}, $buf_pos, 2 );
-                last;
+
+        ## Binary search within the DB entries (stored in descending
+        ## IP order, 7 bytes each).  We look for the first (leftmost)
+        ## entry whose IP range start is <= $ipnb.
+        my $lo_idx = int( $buf_pos / 7 );
+        my $hi_idx = int( $this->{DB_SIZE} / 7 ) - 1;
+        my $found  = -1;
+
+        while ( $lo_idx <= $hi_idx ) {
+            my $mid     = ( $lo_idx + $hi_idx ) >> 1;
+            my $mid_pos = $mid * 7;
+            my $val     = (
+                $base_cache->{ ( $basex2 = substr( $this->{DB}, $mid_pos + 2, 5 ) ) }
+                  ||= baseX2dec($basex2)
+            );
+            if ( $val <= $ipnb ) {
+                $found  = $mid;
+                $hi_idx = $mid - 1;
             }
-            $buf_pos += 7;
+            else {
+                $lo_idx = $mid + 1;
+            }
         }
-        $country ||= substr( $this->{DB}, $buf_pos - 7, 2 );
+
+        $country = $found >= 0
+          ? substr( $this->{DB}, $found * 7, 2 )
+          : substr( $this->{DB}, $this->{DB_SIZE} - 7, 2 );
     }
     ## Will read the DB in the disk:
     else {
