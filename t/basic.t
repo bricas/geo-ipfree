@@ -1,7 +1,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 11;
+use Test::More tests => 13;
 
 use Geo::IPfree;
 
@@ -33,6 +33,15 @@ use Geo::IPfree;
     my ( $country, $country_name, $ip ) = Geo::IPfree::LookUp('192.134.4.20');
     is( $country,      'FR' );
     is( $country_name, 'France' );
+}
+
+{    # functional LoadDB with custom db path
+    use File::Basename;
+    my $db = dirname( $INC{'Geo/IPfree.pm'} ) . '/ipscountry.dat';
+    Geo::IPfree::LoadDB($db);
+    my ( $country, $country_name ) = Geo::IPfree::LookUp('200.160.7.2');
+    is( $country,      'BR',     'functional LoadDB + LookUp country code' );
+    is( $country_name, 'Brazil', 'functional LoadDB + LookUp country name' );
 }
 
 SKIP: {    # does not exist

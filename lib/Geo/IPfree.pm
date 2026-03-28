@@ -84,7 +84,14 @@ sub _find_db_file {
 }
 
 sub LoadDB {
-    my $this = shift;
+    my $this;
+
+    if ( $#_ == 0 ) {
+        if ( !$THIS ) { $THIS = Geo::IPfree->new(); }
+        $this = $THIS;
+    }
+    else { $this = shift; }
+
     my ($db_file) = @_;
 
     if ( -d $db_file ) { $db_file .= "/$DEFAULT_DB"; }
