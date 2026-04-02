@@ -20,8 +20,8 @@ Geo::IPfree is a Perl module that determines the originating country of an
 arbitrary IPv4 address. It uses a local file-based database to provide basic
 geolocation services.
 
-An updated version of the database can be obtained by visiting the Webnet77
-website: L<https://web.archive.org/web/2022/http://software77.net/geo-ip/>.
+The database is built from the Regional Internet Registry (RIR) delegation
+files. See the C<misc/> directory for conversion tools.
   
 =head1 METHODS
 
@@ -61,10 +61,10 @@ Clears any cached lookup data.
 
 =head2 Faster( )
 
-Make the LookUp() faster, which is good if you're going to be calling Lookup() many times. This will load the entire DB into memory and read from there,
-not from disk (good way for slow disk or network disks), but use more memory. The module "Memoize" will be enabled for some internal functions too.
+Make the LookUp() faster, which is good if you're going to be calling LookUp() many times. This will load the entire DB into memory and read from there,
+not from disk (good for slow disk or network disks), but use more memory.
 
-Note that if you call Lookup() many times, you'll end up using a lot of memory anyway, so you'll be better off using a lot of memory from the start by calling Faster(),
+Note that if you call LookUp() many times, you'll end up using a lot of memory anyway, so you'll be better off using a lot of memory from the start by calling Faster(),
 and getting an improvement for all calls.
 
 =head2 nslookup( $host, [$last_lookup] )
@@ -133,8 +133,9 @@ If in the log you have many lines with the same IP, GEO::IPfree won't have to ma
 it will cache the last 5000 different IPs. After 5000 IPs an existing IP is removed from the cache and the new
 data is stored.
 
-Note that the Lookup make the query without the last IP number (xxx.xxx.xxx.0),
-then the cache for the IP 192.168.0.1 will be the same for 192.168.0.2 (they are the same query, 192.168.0.0).
+Note that LookUp normalizes the last octet to a /25 boundary for cache keys:
+IPs 192.168.0.1 and 192.168.0.100 share the same cache key (192.168.0.0),
+while 192.168.0.200 uses a different key (192.168.0.128).
 
 =back
 
@@ -149,7 +150,8 @@ of 7 bytes: XXnnnnn
   nnnnn -> the IP range using a base of 85 digits
            (not in dec or hex to get space).
 
-See CPAN for updates of the DB...
+The database can be regenerated from RIR delegation files using the tools
+in the C<misc/> directory.
 
 =head1 NOTES
 
@@ -174,7 +176,7 @@ The module looks for C<ipscountry.dat> in the following locations:
 
 =over 4
 
-=item * https://web.archive.org/web/2022/http://software77.net/geo-ip/
+=item * L<https://www.nro.net/about/rirs/statistics/> - RIR delegation statistics
 
 =back
 
