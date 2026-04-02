@@ -1,7 +1,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 11;
+use Test::More tests => 13;
 
 use Geo::IPfree;
 
@@ -33,6 +33,12 @@ use Geo::IPfree;
     my ( $country, $country_name, $ip ) = Geo::IPfree::LookUp('192.134.4.20');
     is( $country,      'FR' );
     is( $country_name, 'France' );
+}
+
+{    # GH#10: 45.128.139.41 is in the UK, not India
+    my ( $country, $country_name, $ip ) = Geo::IPfree::LookUp('45.128.139.41');
+    is( $country,      'GB' );
+    is( $country_name, 'United Kingdom' );
 }
 
 SKIP: {    # does not exist
