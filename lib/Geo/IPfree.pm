@@ -101,6 +101,12 @@ sub LoadDB {
 
     delete $this->{pos} if $this->{pos};
 
+    ## Reset Faster() state so lookups use the new DB from disk
+    delete $this->{FASTER};
+    delete $this->{DB};
+    delete $this->{DB_SIZE};
+    delete $this->{'baseX2dec'};
+
     while ( read( $handler, $buffer, 1, length($buffer) ) ) {
         if ( $buffer =~ /##headers##(\d+)##$/s ) {
             my $headers;
