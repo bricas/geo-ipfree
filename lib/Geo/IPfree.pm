@@ -134,6 +134,10 @@ sub LookUp {
     substr( $ip, 0, 1, '' ) if substr( $ip, 0, 1 ) eq '.';
     chop $ip                if substr( $ip, -1 ) eq '.';
 
+    if ( index( $ip, ':' ) >= 0 ) {
+        Carp::croak("IPv6 addresses are not supported (got '$ip')");
+    }
+
     if ( $ip !~ /^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$/ ) {
         $ip = nslookup($ip);
     }
