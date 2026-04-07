@@ -146,7 +146,7 @@ tries to use less bytes per input (block). The file was in ASCII and in blocks
 of 7 bytes: XXnnnnn
 
   XX    -> the country code (BR,US...)
-  nnnnn -> the IP range using a base of 85 digits
+  nnnnn -> the IP range using a base of 86 digits
            (not in dec or hex to get space).
 
 See CPAN for updates of the DB...

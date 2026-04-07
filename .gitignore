@@ -13,3 +13,7 @@ README
 *.tar.gz
 Geo-IPfree-*
 .build
+.DS_Store
+.env*
+.idea/
+.vscode/
