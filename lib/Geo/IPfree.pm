@@ -173,8 +173,6 @@ sub LookUp {
     }
     ## Will read the DB in the disk:
     else {
-        seek( $this->{handler}, 0, 0 )
-          if $] < 5.006001;    ## Fix bug on Perl 5.6.0
         seek( $this->{handler}, $buf_pos + $this->{start}, 0 );
         while ( read( $this->{handler}, $buffer, 7 ) ) {
             if ( $ipnb >= baseX2dec( substr( $buffer, 2 ) ) ) {
